@@ -64,6 +64,14 @@ namespace VirtualGrid.Asus
                         _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.SpaceLed2].Color = color;
                         _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.SpaceLed3].Color = color;
                         break;
+                    case "ExtraLed2":
+                        _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.LedBar2].Color = color;
+                        _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.LedBar3].Color = color;
+                        break;
+                    case "ExtraLed3":
+                        _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.LedBar3].Color = color;
+                        _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.LedBar4].Color = color;
+                        break;
                     default:
                         var asusKey = KeyConvert(key.FriendlyName);
                         if (asusKey == RogStrixKeyboardKey.GhostKey)
