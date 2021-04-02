@@ -24,18 +24,34 @@ namespace VirtualGrid.Asus
         /// </summary>
         public static IPhysicalDeviceAdapter Instance = _adapter ??= new AsusRogStrix_G15_2021_Adapter();
 
+        //<inheritdoc/>
+        public string Name => "Asus Rog Strix Laptop";
+
+        //<inheritdoc/>
+        public bool Initialized { get; }
+
         private AsusRogStrix_G15_2021_Adapter()
         {
-            var sdk = (IAuraSdk2)new AuraSdk();
-            sdk.SwitchMode();
-            var devices = sdk.Enumerate(528384);
-            this._sdk = sdk;
-            this._notebookKeyboard = devices.Count > 0 ? devices[0] : null;
+            try
+            {
+                var sdk = (IAuraSdk2)new AuraSdk();
+                sdk.SwitchMode();
+                var devices = sdk.Enumerate(528384);
+                this._sdk = sdk;
+                this._notebookKeyboard = devices.Count > 0 ? devices[0] : null;
+                this.Initialized = true;
+            }
+            catch (Exception)
+            {
+
+                this.Initialized = false;
+            }
         }
 
+        // <inheritdoc/>
         public Task ApplyAsync(IVirtualLedGrid virtualGrid, CancellationToken cancellationToken = default)
         {
-            if (_sdk == null || this._notebookKeyboard == null)
+            if (!this.Initialized)
                 return Task.CompletedTask;
 
             foreach (var key in virtualGrid.Where(x => x.Type != KeyType.Headset))
@@ -104,7 +120,7 @@ namespace VirtualGrid.Asus
 
         private static uint ToUint(Color color)
         {
-            var value = (color.R << 16) | (color.G << 8) | (color.B);
+            var value = (color.B << 16) | (color.G << 8) | (color.R);
             return (uint)value;
         }
     }

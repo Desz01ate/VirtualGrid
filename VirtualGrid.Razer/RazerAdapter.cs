@@ -25,13 +25,30 @@ namespace VirtualGrid.Razer
         /// </summary>
         public static IPhysicalDeviceAdapter Instance = _adapter ??= new RazerAdapter();
 
+        //<inheritdoc/>
+        public string Name => "RΛZΞR Chroma";
+
+        //<inheritdoc/>
+        public bool Initialized { get; }
+
         private RazerAdapter()
         {
-            this._chromaInterface = ColoreProvider.CreateNativeAsync().Result;
+            try
+            {
+                this._chromaInterface = ColoreProvider.CreateNativeAsync().Result;
+                this.Initialized = true;
+            }
+            catch (Exception)
+            {
+                this.Initialized = false;
+            }
         }
 
         public async Task ApplyAsync(IVirtualLedGrid virtualGrid, CancellationToken cancellationToken = default)
         {
+            if (!this.Initialized)
+                return;
+
             var keyboardGrid = CustomKeyboardEffect.Create();
             var mouseGrid = CustomMouseEffect.Create();
             var mousepadGrid = CustomMousepadEffect.Create();

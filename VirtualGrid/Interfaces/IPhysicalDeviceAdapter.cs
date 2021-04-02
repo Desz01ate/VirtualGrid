@@ -12,6 +12,14 @@ namespace VirtualGrid.Interfaces
     public interface IPhysicalDeviceAdapter : IDisposable
     {
         /// <summary>
+        /// Adapter name.
+        /// </summary>
+        string Name { get; }
+        /// <summary>
+        /// Determine whether the adapter is initialize successfully. 
+        /// </summary>
+        bool Initialized { get; }
+        /// <summary>
         /// Apply the effects from <see cref="IVirtualLedGrid"/> to physical devices.
         /// </summary>
         /// <param name="virtualGrid">Instance of <see cref="IVirtualLedGrid"/></param>
