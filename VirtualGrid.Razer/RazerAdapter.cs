@@ -19,19 +19,13 @@ namespace VirtualGrid.Razer
     {
         private readonly IChroma _chromaInterface;
 
-        private static IPhysicalDeviceAdapter _adapter;
-        /// <summary>
-        /// An instance of Razer Adapter.
-        /// </summary>
-        public static IPhysicalDeviceAdapter Instance = _adapter ??= new RazerAdapter();
-
         //<inheritdoc/>
         public string Name => "RΛZΞR Chroma";
 
         //<inheritdoc/>
         public bool Initialized { get; }
 
-        private RazerAdapter()
+        public RazerAdapter()
         {
             try
             {

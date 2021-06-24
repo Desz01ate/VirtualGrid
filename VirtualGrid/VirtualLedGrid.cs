@@ -206,10 +206,7 @@ namespace VirtualGrid
                         };
             return new VirtualLedGrid(grid);
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+
         public IEnumerator<IVirtualKey> GetEnumerator()
         {
             foreach (var key in this.grid)

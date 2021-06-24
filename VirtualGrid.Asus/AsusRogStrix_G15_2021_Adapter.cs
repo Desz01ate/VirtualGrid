@@ -18,19 +18,13 @@ namespace VirtualGrid.Asus
         private readonly IAuraSdk2 _sdk;
         private readonly IAuraSyncDevice _notebookKeyboard;
 
-        private static IPhysicalDeviceAdapter _adapter;
-        /// <summary>
-        /// An instance of Razer Adapter.
-        /// </summary>
-        public static IPhysicalDeviceAdapter Instance = _adapter ??= new AsusRogStrix_G15_2021_Adapter();
-
         //<inheritdoc/>
         public string Name => "Asus Rog Strix Laptop";
 
         //<inheritdoc/>
         public bool Initialized { get; }
 
-        private AsusRogStrix_G15_2021_Adapter()
+        public AsusRogStrix_G15_2021_Adapter()
         {
             try
             {
@@ -43,7 +37,6 @@ namespace VirtualGrid.Asus
             }
             catch (Exception)
             {
-
                 this.Initialized = false;
             }
         }
@@ -116,7 +109,6 @@ namespace VirtualGrid.Asus
                 return (RogStrixKeyboardKey)v;
             return RogStrixKeyboardKey.GhostKey;
         }
-
 
         private static uint ToUint(Color color)
         {
