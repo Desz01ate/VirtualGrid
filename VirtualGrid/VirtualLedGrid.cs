@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using VirtualGrid.Enums;
 using VirtualGrid.Interfaces;
@@ -79,20 +80,31 @@ namespace VirtualGrid
         /// <param name="mousepad"></param>
         /// <param name="headset"></param>
         /// <param name="chromaExtra"></param>
-        public VirtualLedGrid(System.Enum[,] keys)
+        public VirtualLedGrid(System.Enum[][] keys)
         {
-            var xDimension = keys.GetLength(1);
-            var yDimension = keys.GetLength(0);
+            if (keys == null)
+            {
+                throw new System.ArgumentNullException(nameof(keys));
+            }
+            if (!keys.Any())
+            {
+                throw new ArgumentException($"'{nameof(keys)} contains no element.");
+            }
+            if (!ValidateJaggedArrayElementsLength(keys))
+            {
+                throw new ArgumentException($"All arrays inside '{nameof(keys)}' must have the same length");
+            }
+
+            var xDimension = keys.First().Length;
+            var yDimension = keys.Length;
             this.ColumnCount = xDimension;
             this.RowCount = yDimension;
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
             var grid = new VirtualKey[xDimension, yDimension];
-#pragma warning restore CA1814 // Prefer jagged arrays over multidimensional
             for (var x = 0; x < xDimension; x++)
             {
                 for (var y = 0; y < yDimension; y++)
                 {
-                    var @enum = keys[y, x];
+                    var @enum = keys[y][x];
                     KeyType keyType;
                     if (@enum is KeyboardLed key)
                     {
@@ -127,6 +139,23 @@ namespace VirtualGrid
                 }
             }
             this.grid = grid;
+
+            bool ValidateJaggedArrayElementsLength(object[][] source)
+            {
+                int count = -1;
+                foreach (var element in source)
+                {
+                    if (count == -1)
+                    {
+                        count = element.Length;
+                        continue;
+                    }
+
+                    if (count != element.Length)
+                        return false;
+                }
+                return true;
+            }
         }
 
         /// <summary>
@@ -166,23 +195,18 @@ namespace VirtualGrid
         /// <returns></returns>
         public static IVirtualLedGrid CreateDefaultGrid()
         {
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-            var grid = new System.Enum[,]{
-                            { MousepadLed.Led0,MousepadLed.Led1,MousepadLed.Led2,MousepadLed.Led3,MousepadLed.Led4,MousepadLed.Led5,MousepadLed.Led6,MousepadLed.Led7,MousepadLed.Led8,MousepadLed.Led9,MousepadLed.Led10,MousepadLed.Led11,MousepadLed.Led12,MousepadLed.Led13,MousepadLed.Led14,KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Invalid,MouseLed.LeftSide1, KeyboardLed.Invalid, KeyboardLed.Invalid, KeyboardLed.Invalid, KeyboardLed.Invalid, KeyboardLed.Invalid ,MouseLed.RightSide1 },
-                            { KeyboardLed.Invalid, KeyboardLed.Escape, KeyboardLed.Invalid, KeyboardLed.F1,KeyboardLed.F2,KeyboardLed.F3, KeyboardLed.F4,KeyboardLed.F5, KeyboardLed.F6, KeyboardLed.F7, KeyboardLed.F8, KeyboardLed.F9, KeyboardLed.F10, KeyboardLed.F11, KeyboardLed.F12,KeyboardLed.PrintScreen,KeyboardLed.Scroll,KeyboardLed.Pause, KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Logo,KeyboardLed.Invalid, MouseLed.LeftSide2,KeyboardLed.Invalid, KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Invalid, KeyboardLed.Invalid, MouseLed.RightSide2 },
-                            { KeyboardLed.Macro1, KeyboardLed.OemTilde, KeyboardLed.D1, KeyboardLed.D2, KeyboardLed.D3, KeyboardLed.D4, KeyboardLed.D5, KeyboardLed.D6, KeyboardLed.D7, KeyboardLed.D8, KeyboardLed.D9, KeyboardLed.D0,KeyboardLed.OemMinus, KeyboardLed.OemEquals, KeyboardLed.Backspace,KeyboardLed.Insert,KeyboardLed.Home,KeyboardLed.PageUp,KeyboardLed.NumLock,KeyboardLed.NumDivide,KeyboardLed.NumMultiply,KeyboardLed.NumSubtract, MouseLed.LeftSide3,KeyboardLed.Invalid, KeyboardLed.Invalid,MouseLed.ScrollWheel, KeyboardLed.Invalid,  KeyboardLed.Invalid ,MouseLed.RightSide3},
-                            { KeyboardLed.Macro2,KeyboardLed.Tab,KeyboardLed.Q,KeyboardLed.W,KeyboardLed.E,KeyboardLed.R,KeyboardLed.T,KeyboardLed.Y,KeyboardLed.U,KeyboardLed.I,KeyboardLed.O,KeyboardLed.P,KeyboardLed.OemLeftBracket,KeyboardLed.OemRightBracket,KeyboardLed.OemBackslash, KeyboardLed.Delete,KeyboardLed.End,KeyboardLed.PageDown,KeyboardLed.Num7,KeyboardLed.Num8,KeyboardLed.Num9,KeyboardLed.NumAdd, MouseLed.LeftSide4,KeyboardLed.Invalid, KeyboardLed.Invalid, KeyboardLed.Invalid, KeyboardLed.Invalid, KeyboardLed.Invalid,MouseLed.RightSide4, },
-                            { KeyboardLed.Macro3,KeyboardLed.CapsLock,KeyboardLed.A,KeyboardLed.S,KeyboardLed.D,KeyboardLed.F,KeyboardLed.G,KeyboardLed.H,KeyboardLed.J,KeyboardLed.K,KeyboardLed.L,KeyboardLed.OemSemicolon,KeyboardLed.OemApostrophe, KeyboardLed.Invalid,KeyboardLed.Enter,KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Num4,KeyboardLed.Num5,KeyboardLed.Num6,KeyboardLed.Invalid ,MouseLed.LeftSide5, KeyboardLed.Invalid, KeyboardLed.Invalid,MouseLed.Backlight, KeyboardLed.Invalid, KeyboardLed.Invalid,MouseLed.RightSide5, },
-                            { KeyboardLed.Macro4,KeyboardLed.LeftShift,KeyboardLed.Invalid, KeyboardLed.Z,KeyboardLed.X,KeyboardLed.C,KeyboardLed.V,KeyboardLed.B,KeyboardLed.N,KeyboardLed.M,KeyboardLed.OemComma,KeyboardLed.OemPeriod,KeyboardLed.OemSlash,KeyboardLed.Invalid, KeyboardLed.RightShift, KeyboardLed.Invalid,KeyboardLed.Up,KeyboardLed.Invalid,KeyboardLed.Num1,KeyboardLed.Num2,KeyboardLed.Num3,KeyboardLed.NumEnter,MouseLed.LeftSide6, ExtraDeviceLed.ExtraLed0,ExtraDeviceLed.ExtraLed1,ExtraDeviceLed.ExtraLed2,ExtraDeviceLed.ExtraLed3,ExtraDeviceLed.ExtraLed4 ,MouseLed.RightSide6 },
-                            { KeyboardLed.Macro5, KeyboardLed.LeftControl,KeyboardLed.LeftWindows,KeyboardLed.LeftAlt,KeyboardLed.Invalid, KeyboardLed.Invalid, KeyboardLed.Invalid,KeyboardLed.Space,KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Invalid, KeyboardLed.RightAlt,KeyboardLed.Function,KeyboardLed.RightMenu,KeyboardLed.RightControl,KeyboardLed.Left,KeyboardLed.Down,KeyboardLed.Right,KeyboardLed.Invalid,KeyboardLed.Num0,KeyboardLed.NumDecimal,KeyboardLed.Invalid,MouseLed.LeftSide7, KeyboardLed.Invalid,HeadsetLed.Left,MouseLed.Logo,HeadsetLed.Right, KeyboardLed.Invalid,MouseLed.RightSide7 },
+            var grid = new Enum[][]{
+                            new Enum[] { MousepadLed.Led0,MousepadLed.Led1,MousepadLed.Led2,MousepadLed.Led3,MousepadLed.Led4,MousepadLed.Led5,MousepadLed.Led6,MousepadLed.Led7,MousepadLed.Led8,MousepadLed.Led9,MousepadLed.Led10,MousepadLed.Led11,MousepadLed.Led12,MousepadLed.Led13,MousepadLed.Led14,KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Invalid,MouseLed.LeftSide1, KeyboardLed.Invalid, KeyboardLed.Invalid, KeyboardLed.Invalid, KeyboardLed.Invalid, KeyboardLed.Invalid ,MouseLed.RightSide1 },
+                            new Enum[] { KeyboardLed.Invalid, KeyboardLed.Escape, KeyboardLed.Invalid, KeyboardLed.F1,KeyboardLed.F2,KeyboardLed.F3, KeyboardLed.F4,KeyboardLed.F5, KeyboardLed.F6, KeyboardLed.F7, KeyboardLed.F8, KeyboardLed.F9, KeyboardLed.F10, KeyboardLed.F11, KeyboardLed.F12,KeyboardLed.PrintScreen,KeyboardLed.Scroll,KeyboardLed.Pause, KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Logo,KeyboardLed.Invalid, MouseLed.LeftSide2,KeyboardLed.Invalid, KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Invalid, KeyboardLed.Invalid, MouseLed.RightSide2 },
+                            new Enum[] { KeyboardLed.Macro1, KeyboardLed.OemTilde, KeyboardLed.D1, KeyboardLed.D2, KeyboardLed.D3, KeyboardLed.D4, KeyboardLed.D5, KeyboardLed.D6, KeyboardLed.D7, KeyboardLed.D8, KeyboardLed.D9, KeyboardLed.D0,KeyboardLed.OemMinus, KeyboardLed.OemEquals, KeyboardLed.Backspace,KeyboardLed.Insert,KeyboardLed.Home,KeyboardLed.PageUp,KeyboardLed.NumLock,KeyboardLed.NumDivide,KeyboardLed.NumMultiply,KeyboardLed.NumSubtract, MouseLed.LeftSide3,KeyboardLed.Invalid, KeyboardLed.Invalid,MouseLed.ScrollWheel, KeyboardLed.Invalid,  KeyboardLed.Invalid ,MouseLed.RightSide3},
+                            new Enum[] { KeyboardLed.Macro2,KeyboardLed.Tab,KeyboardLed.Q,KeyboardLed.W,KeyboardLed.E,KeyboardLed.R,KeyboardLed.T,KeyboardLed.Y,KeyboardLed.U,KeyboardLed.I,KeyboardLed.O,KeyboardLed.P,KeyboardLed.OemLeftBracket,KeyboardLed.OemRightBracket,KeyboardLed.OemBackslash, KeyboardLed.Delete,KeyboardLed.End,KeyboardLed.PageDown,KeyboardLed.Num7,KeyboardLed.Num8,KeyboardLed.Num9,KeyboardLed.NumAdd, MouseLed.LeftSide4,KeyboardLed.Invalid, KeyboardLed.Invalid, KeyboardLed.Invalid, KeyboardLed.Invalid, KeyboardLed.Invalid,MouseLed.RightSide4, },
+                            new Enum[] { KeyboardLed.Macro3,KeyboardLed.CapsLock,KeyboardLed.A,KeyboardLed.S,KeyboardLed.D,KeyboardLed.F,KeyboardLed.G,KeyboardLed.H,KeyboardLed.J,KeyboardLed.K,KeyboardLed.L,KeyboardLed.OemSemicolon,KeyboardLed.OemApostrophe, KeyboardLed.Invalid,KeyboardLed.Enter,KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Num4,KeyboardLed.Num5,KeyboardLed.Num6,KeyboardLed.Invalid ,MouseLed.LeftSide5, KeyboardLed.Invalid, KeyboardLed.Invalid,MouseLed.Backlight, KeyboardLed.Invalid, KeyboardLed.Invalid,MouseLed.RightSide5, },
+                            new Enum[] { KeyboardLed.Macro4,KeyboardLed.LeftShift,KeyboardLed.Invalid, KeyboardLed.Z,KeyboardLed.X,KeyboardLed.C,KeyboardLed.V,KeyboardLed.B,KeyboardLed.N,KeyboardLed.M,KeyboardLed.OemComma,KeyboardLed.OemPeriod,KeyboardLed.OemSlash,KeyboardLed.Invalid, KeyboardLed.RightShift, KeyboardLed.Invalid,KeyboardLed.Up,KeyboardLed.Invalid,KeyboardLed.Num1,KeyboardLed.Num2,KeyboardLed.Num3,KeyboardLed.NumEnter,MouseLed.LeftSide6, ExtraDeviceLed.ExtraLed0,ExtraDeviceLed.ExtraLed1,ExtraDeviceLed.ExtraLed2,ExtraDeviceLed.ExtraLed3,ExtraDeviceLed.ExtraLed4 ,MouseLed.RightSide6 },
+                            new Enum[] { KeyboardLed.Macro5, KeyboardLed.LeftControl,KeyboardLed.LeftWindows,KeyboardLed.LeftAlt,KeyboardLed.Invalid, KeyboardLed.Invalid, KeyboardLed.Invalid,KeyboardLed.Space,KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Invalid, KeyboardLed.RightAlt,KeyboardLed.Function,KeyboardLed.RightMenu,KeyboardLed.RightControl,KeyboardLed.Left,KeyboardLed.Down,KeyboardLed.Right,KeyboardLed.Invalid,KeyboardLed.Num0,KeyboardLed.NumDecimal,KeyboardLed.Invalid,MouseLed.LeftSide7, KeyboardLed.Invalid,HeadsetLed.Left,MouseLed.Logo,HeadsetLed.Right, KeyboardLed.Invalid,MouseLed.RightSide7 },
                         };
-#pragma warning restore CA1814 // Prefer jagged arrays over multidimensional
             return new VirtualLedGrid(grid);
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+
         public IEnumerator<IVirtualKey> GetEnumerator()
         {
             foreach (var key in this.grid)
