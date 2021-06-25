@@ -6,6 +6,7 @@ namespace VirtualGrid.Asus.Enums
 {
     internal enum RogStrixKeyboardKey
     {
+        // row 0
         GhostKey = -1,
         Invalid0_1 = 0,
         Invalid0_2 = 1,
@@ -28,6 +29,7 @@ namespace VirtualGrid.Asus.Enums
         Invalid0_14 = 18,
         Invalid0_15 = 19,
         Invalid0_16 = 20,
+        // row 1
         Escape = 21,
         Invalid1_1 = 22,
         F1 = 23,
@@ -49,6 +51,7 @@ namespace VirtualGrid.Asus.Enums
         Invalid1_5 = 39,
         Invalid1_6 = 40,
         Invalid1_7 = 41,
+        // row 2
         TildeGraveAccent = 42,
         D1 = 43,
         D2 = 44,
@@ -66,10 +69,13 @@ namespace VirtualGrid.Asus.Enums
         BackspaceLed1 = 56,
         BackspaceLed2 = 57,
         MultimediaPlay = 58,
+
         Invalid2_1 = 59,
         Invalid2_2 = 60,
         Invalid2_3 = 61,
         Invalid2_4 = 62,
+
+        // row 3
         Tab = 63,
         Q = 64,
         W = 65,
@@ -87,10 +93,13 @@ namespace VirtualGrid.Asus.Enums
         Invalid3_1 = 77,
         Invalid3_2 = 78,
         MultimediaPause = 79,
+
         Invalid3_3 = 80,
         Invalid3_4 = 81,
         Invalid3_5 = 82,
         Invalid3_6 = 83,
+
+        // row 4
         CapsLock = 84,
         A = 85,
         S = 86,
@@ -108,10 +117,13 @@ namespace VirtualGrid.Asus.Enums
         OemEnterLed1 = 98,
         OemEnterLed2 = 99,
         MultimediaPrevious = 100,
+
         Invalid4_2 = 101,
         Invalid4_3 = 102,
         Invalid4_4 = 103,
         Invalid4_5 = 104,
+
+        // row 5
         LeftShift = 105,
         Invalid5_1 = 106,
         Z = 107,
@@ -129,10 +141,13 @@ namespace VirtualGrid.Asus.Enums
         RightShiftLed1 = 119,
         RightShiftLed2 = 120,
         MultimediaNext = 121,
+
         Invalid5_3 = 122,
         Invalid5_4 = 123,
         Invalid5_5 = 124,
         Invalid5_6 = 125,
+
+        // row 6
         LeftCtrl = 126,
         OemFunction = 127,
         LeftWindows = 128,
@@ -141,7 +156,6 @@ namespace VirtualGrid.Asus.Enums
         SpaceLed1 = 131,
         SpaceLed2 = 132,
         SpaceLed3 = 133,
-
         Invalid6_1 = 134,
         RightAlt = 135,
         Invalid6_2 = 136,
@@ -155,7 +169,7 @@ namespace VirtualGrid.Asus.Enums
         Invalid6_7 = 144,
         Invalid6_8 = 145,
         Invalid6_9 = 146,
-
+        // row 7
         Invalid7_1 = 147,
         Invalid7_2 = 148,
         Invalid7_3 = 149,
@@ -178,27 +192,28 @@ namespace VirtualGrid.Asus.Enums
         Invalid7_15 = 164,
         Invalid7_16 = 165,
         Invalid7_17 = 166,
+        Invalid7_18 = 167,
 
-        Invalid8_1 = 167,
-        Invalid8_2 = 168,
+        // row 9
+        Invalid8_1 = 168,
         LedBar5 = 169,
         LedBar4 = 170,
         LedBar3 = 171,
         LedBar2 = 172,
         LedBar1 = 173,
         LedBar0 = 174,
-        Invalid8_9 = 175,
-        Invalid8_10 = 176,
-        Invalid8_11 = 177,
-        Invalid8_12 = 178,
-        Invalid8_13 = 179,
-        Invalid8_14 = 180,
-        Invalid8_15 = 181,
-        Invalid8_16 = 182,
-        Invalid8_17 = 183,
-        Invalid8_18 = 184,
-        Invalid8_19 = 185,
-        Invalid8_20 = 186,
+        Invalid8_10 = 175,
+        Invalid8_11 = 176,
+        Invalid8_12 = 177,
+        Invalid8_13 = 178,
+        Invalid8_14 = 179,
+        Invalid8_15 = 180,
+        Invalid8_16 = 181,
+        Invalid8_17 = 182,
+        Invalid8_18 = 183,
+        Invalid8_19 = 184,
+        Invalid8_20 = 185,
+        Invalid8_21 = 186,
     }
 
 }

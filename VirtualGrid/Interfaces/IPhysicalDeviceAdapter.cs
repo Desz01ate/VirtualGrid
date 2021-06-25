@@ -15,10 +15,22 @@ namespace VirtualGrid.Interfaces
         /// Adapter name.
         /// </summary>
         string Name { get; }
+
         /// <summary>
         /// Determine whether the adapter is initialize successfully. 
         /// </summary>
         bool Initialized { get; }
+
+        /// <summary>
+        /// Indicate total row count.
+        /// </summary>
+        int RowCount { get; }
+
+        /// <summary>
+        /// Indicate total column count.
+        /// </summary>
+        int ColumnCount { get; }
+
         /// <summary>
         /// Apply the effects from <see cref="IVirtualLedGrid"/> to physical devices.
         /// </summary>

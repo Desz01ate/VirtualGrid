@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using VirtualGrid.Enums;
 using VirtualGrid.Interfaces;
 
 namespace VirtualGrid
@@ -17,30 +14,27 @@ namespace VirtualGrid
         {
             public (int X, int Y) Index { get; }
 
-            public string FriendlyName { get; }
-
             public Color Color { get; set; }
 
-            public KeyType Type { get; }
-
-            public int KeyCode { get; }
-
-            public VirtualKey(string friendlyName, int x, int y, int internalKeyCode, KeyType keyType, Color color = default)
+            public VirtualKey(int x, int y, Color color = default)
             {
                 this.Index = (x, y);
-                this.FriendlyName = friendlyName;
-                this.Type = keyType;
                 this.Color = color;
-                this.KeyCode = internalKeyCode;
             }
 
             public override string ToString()
             {
-                return this.FriendlyName + $"({Index.X},{Index.Y})";
+                return $"({Index.X},{Index.Y}): {Color.Value}";
             }
         }
 
-        private readonly IVirtualKey[,] grid;
+        private readonly int _totalRowCount;
+        private readonly int _totalColumnCount;
+        private readonly IVirtualKey[][] _grid;
+
+        public int RowCount => _totalRowCount;
+
+        public int ColumnCount => _totalColumnCount;
 
         /// <summary>
         /// Indexer for accesing color of the virtual grid using specific index.
@@ -52,110 +46,40 @@ namespace VirtualGrid
         {
             get
             {
-                return grid[column, row].Color;
+                return _grid[row][column].Color;
             }
 
             set
             {
-                grid[column, row].Color = value;
+                _grid[row][column].Color = value;
             }
         }
 
         /// <summary>
-        /// Row count for virtual grid.
-        /// </summary>
-        public int RowCount { get; }
-
-        /// <summary>
-        /// Column count for virtual grid.
-        /// </summary>
-        public int ColumnCount { get; }
-
-        /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="keys"></param>
-        /// <param name="keyboard"></param>
-        /// <param name="mouse"></param>
-        /// <param name="mousepad"></param>
-        /// <param name="headset"></param>
-        /// <param name="chromaExtra"></param>
-        public VirtualLedGrid(System.Enum[][] keys)
+        public VirtualLedGrid(int column, int row)
         {
-            if (keys == null)
+            var grid = new VirtualKey[row][];
+            for (var rowCount = 0; rowCount < row; rowCount++)
             {
-                throw new System.ArgumentNullException(nameof(keys));
-            }
-            if (!keys.Any())
-            {
-                throw new ArgumentException($"'{nameof(keys)} contains no element.");
-            }
-            if (!ValidateJaggedArrayElementsLength(keys))
-            {
-                throw new ArgumentException($"All arrays inside '{nameof(keys)}' must have the same length");
-            }
-
-            var xDimension = keys.First().Length;
-            var yDimension = keys.Length;
-            this.ColumnCount = xDimension;
-            this.RowCount = yDimension;
-            var grid = new VirtualKey[xDimension, yDimension];
-            for (var x = 0; x < xDimension; x++)
-            {
-                for (var y = 0; y < yDimension; y++)
+                var rowArray = new VirtualKey[column];
+                for (var columnCount = 0; columnCount < column; columnCount++)
                 {
-                    var @enum = keys[y][x];
-                    KeyType keyType;
-                    if (@enum is KeyboardLed key)
-                    {
-                        if (key == KeyboardLed.Invalid)
-                            keyType = KeyType.Invalid;
-                        else
-                            keyType = KeyType.Keyboard;
-                    }
-                    else if (@enum is MouseLed)
-                    {
-                        keyType = KeyType.Mouse;
-                    }
-                    else if (@enum is MousepadLed)
-                    {
-                        keyType = KeyType.Mousepad;
-                    }
-                    else if (@enum is HeadsetLed)
-                    {
-                        keyType = KeyType.Headset;
-                    }
-                    else if (@enum is ExtraDeviceLed)
-                    {
-                        keyType = KeyType.ExtraDevice;
-                    }
-                    else
-                    {
-                        throw new NotSupportedException(@enum.GetType().FullName);
-                    }
-
-                    var abstractKey = new VirtualKey(@enum.ToString(), x, y, Convert.ToInt32(@enum), keyType);
-                    grid[x, y] = abstractKey;
+                    rowArray[columnCount] = new VirtualKey(columnCount, rowCount);
                 }
+                grid[rowCount] = rowArray;
             }
-            this.grid = grid;
+            this._grid = grid;
+            this._totalColumnCount = column;
+            this._totalRowCount = row;
+        }
 
-            bool ValidateJaggedArrayElementsLength(object[][] source)
-            {
-                int count = -1;
-                foreach (var element in source)
-                {
-                    if (count == -1)
-                    {
-                        count = element.Length;
-                        continue;
-                    }
-
-                    if (count != element.Length)
-                        return false;
-                }
-                return true;
-            }
+        private VirtualLedGrid(IVirtualKey[][] grid, int column, int row)
+        {
+            this._grid = grid ?? throw new ArgumentNullException(nameof(grid));
+            this._totalColumnCount = column;
+            this._totalRowCount = row;
         }
 
         /// <summary>
@@ -164,10 +88,9 @@ namespace VirtualGrid
         /// <param name="color"></param>
         public void Set(Color color)
         {
-            foreach (var key in this.grid)
-            {
-                key.Color = color;
-            }
+            foreach (var row in this._grid)
+                foreach (var key in row)
+                    key.Color = color;
         }
 
         /// <summary>
@@ -189,35 +112,47 @@ namespace VirtualGrid
             }
         }
 
-        /// <summary>
-        /// Create default virtual grid with predefined layout.
-        /// </summary>
-        /// <returns></returns>
-        public static IVirtualLedGrid CreateDefaultGrid()
-        {
-            var grid = new Enum[][]{
-                            new Enum[] { MousepadLed.Led0,MousepadLed.Led1,MousepadLed.Led2,MousepadLed.Led3,MousepadLed.Led4,MousepadLed.Led5,MousepadLed.Led6,MousepadLed.Led7,MousepadLed.Led8,MousepadLed.Led9,MousepadLed.Led10,MousepadLed.Led11,MousepadLed.Led12,MousepadLed.Led13,MousepadLed.Led14,KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Invalid,MouseLed.LeftSide1, KeyboardLed.Invalid, KeyboardLed.Invalid, KeyboardLed.Invalid, KeyboardLed.Invalid, KeyboardLed.Invalid ,MouseLed.RightSide1 },
-                            new Enum[] { KeyboardLed.Invalid, KeyboardLed.Escape, KeyboardLed.Invalid, KeyboardLed.F1,KeyboardLed.F2,KeyboardLed.F3, KeyboardLed.F4,KeyboardLed.F5, KeyboardLed.F6, KeyboardLed.F7, KeyboardLed.F8, KeyboardLed.F9, KeyboardLed.F10, KeyboardLed.F11, KeyboardLed.F12,KeyboardLed.PrintScreen,KeyboardLed.Scroll,KeyboardLed.Pause, KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Logo,KeyboardLed.Invalid, MouseLed.LeftSide2,KeyboardLed.Invalid, KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Invalid, KeyboardLed.Invalid, MouseLed.RightSide2 },
-                            new Enum[] { KeyboardLed.Macro1, KeyboardLed.OemTilde, KeyboardLed.D1, KeyboardLed.D2, KeyboardLed.D3, KeyboardLed.D4, KeyboardLed.D5, KeyboardLed.D6, KeyboardLed.D7, KeyboardLed.D8, KeyboardLed.D9, KeyboardLed.D0,KeyboardLed.OemMinus, KeyboardLed.OemEquals, KeyboardLed.Backspace,KeyboardLed.Insert,KeyboardLed.Home,KeyboardLed.PageUp,KeyboardLed.NumLock,KeyboardLed.NumDivide,KeyboardLed.NumMultiply,KeyboardLed.NumSubtract, MouseLed.LeftSide3,KeyboardLed.Invalid, KeyboardLed.Invalid,MouseLed.ScrollWheel, KeyboardLed.Invalid,  KeyboardLed.Invalid ,MouseLed.RightSide3},
-                            new Enum[] { KeyboardLed.Macro2,KeyboardLed.Tab,KeyboardLed.Q,KeyboardLed.W,KeyboardLed.E,KeyboardLed.R,KeyboardLed.T,KeyboardLed.Y,KeyboardLed.U,KeyboardLed.I,KeyboardLed.O,KeyboardLed.P,KeyboardLed.OemLeftBracket,KeyboardLed.OemRightBracket,KeyboardLed.OemBackslash, KeyboardLed.Delete,KeyboardLed.End,KeyboardLed.PageDown,KeyboardLed.Num7,KeyboardLed.Num8,KeyboardLed.Num9,KeyboardLed.NumAdd, MouseLed.LeftSide4,KeyboardLed.Invalid, KeyboardLed.Invalid, KeyboardLed.Invalid, KeyboardLed.Invalid, KeyboardLed.Invalid,MouseLed.RightSide4, },
-                            new Enum[] { KeyboardLed.Macro3,KeyboardLed.CapsLock,KeyboardLed.A,KeyboardLed.S,KeyboardLed.D,KeyboardLed.F,KeyboardLed.G,KeyboardLed.H,KeyboardLed.J,KeyboardLed.K,KeyboardLed.L,KeyboardLed.OemSemicolon,KeyboardLed.OemApostrophe, KeyboardLed.Invalid,KeyboardLed.Enter,KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Num4,KeyboardLed.Num5,KeyboardLed.Num6,KeyboardLed.Invalid ,MouseLed.LeftSide5, KeyboardLed.Invalid, KeyboardLed.Invalid,MouseLed.Backlight, KeyboardLed.Invalid, KeyboardLed.Invalid,MouseLed.RightSide5, },
-                            new Enum[] { KeyboardLed.Macro4,KeyboardLed.LeftShift,KeyboardLed.Invalid, KeyboardLed.Z,KeyboardLed.X,KeyboardLed.C,KeyboardLed.V,KeyboardLed.B,KeyboardLed.N,KeyboardLed.M,KeyboardLed.OemComma,KeyboardLed.OemPeriod,KeyboardLed.OemSlash,KeyboardLed.Invalid, KeyboardLed.RightShift, KeyboardLed.Invalid,KeyboardLed.Up,KeyboardLed.Invalid,KeyboardLed.Num1,KeyboardLed.Num2,KeyboardLed.Num3,KeyboardLed.NumEnter,MouseLed.LeftSide6, ExtraDeviceLed.ExtraLed0,ExtraDeviceLed.ExtraLed1,ExtraDeviceLed.ExtraLed2,ExtraDeviceLed.ExtraLed3,ExtraDeviceLed.ExtraLed4 ,MouseLed.RightSide6 },
-                            new Enum[] { KeyboardLed.Macro5, KeyboardLed.LeftControl,KeyboardLed.LeftWindows,KeyboardLed.LeftAlt,KeyboardLed.Invalid, KeyboardLed.Invalid, KeyboardLed.Invalid,KeyboardLed.Space,KeyboardLed.Invalid,KeyboardLed.Invalid,KeyboardLed.Invalid, KeyboardLed.RightAlt,KeyboardLed.Function,KeyboardLed.RightMenu,KeyboardLed.RightControl,KeyboardLed.Left,KeyboardLed.Down,KeyboardLed.Right,KeyboardLed.Invalid,KeyboardLed.Num0,KeyboardLed.NumDecimal,KeyboardLed.Invalid,MouseLed.LeftSide7, KeyboardLed.Invalid,HeadsetLed.Left,MouseLed.Logo,HeadsetLed.Right, KeyboardLed.Invalid,MouseLed.RightSide7 },
-                        };
-            return new VirtualLedGrid(grid);
-        }
-
         public IEnumerator<IVirtualKey> GetEnumerator()
         {
-            foreach (var key in this.grid)
-            {
-                yield return key;
-            }
+            foreach (var row in this._grid)
+                foreach (var key in row)
+                    yield return key;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
+        }
+
+        public IVirtualLedGrid? Slice(int column, int row, int columnCount, int rowCount)
+        {
+            var requestedColumn = column + columnCount;
+            var requestedRow = row + rowCount;
+            if (requestedColumn > this._totalColumnCount)
+            {
+                requestedColumn = this._totalColumnCount - 1 - column;
+            }
+
+            if (requestedRow > this._totalRowCount)
+            {
+                requestedRow = this._totalRowCount - 1 - row;
+            }
+
+            //even after adjustment, still exceed grid dimension.
+            if (requestedColumn < 0 || this._totalColumnCount < requestedColumn ||
+                requestedRow < 0 || this._totalRowCount < requestedRow)
+            {
+                return null;
+            }
+
+            var grid = new IVirtualKey[rowCount][];
+            var subRow = this._grid[row..requestedRow];
+            for (var rowIdx = 0; rowIdx < subRow.Length; rowIdx++)
+            {
+                var currentRow = subRow[rowIdx][column..requestedColumn];
+                grid[rowIdx] = currentRow;
+            }
+            return new VirtualLedGrid(grid, requestedColumn - column, requestedRow - row);
         }
     }
 }
