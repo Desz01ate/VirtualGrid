@@ -4,7 +4,13 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
-    <Version>1.0.1</Version>
+    <Version>2.0</Version>
+    <PackageProjectUrl>https://github.com/Desz01ate/VirtualGrid</PackageProjectUrl>
+    <Copyright>Copyright © Chanvut Booneid 2021</Copyright>
+    <RepositoryUrl>https://github.com/Desz01ate/VirtualGrid</RepositoryUrl>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageLicenseExpression></PackageLicenseExpression>
+    <Description>An adapter to convert VirtualGrid to Razer-compatible devices.</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
