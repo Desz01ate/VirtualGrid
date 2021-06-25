@@ -1,13 +1,6 @@
-﻿using Colore;
-using Colore.Effects.ChromaLink;
-using Colore.Effects.Headset;
-using Colore.Effects.Keyboard;
-using Colore.Effects.Mouse;
-using Colore.Effects.Mousepad;
-using System;
+﻿using Colore.Effects.Keyboard;
 using System.Threading;
 using System.Threading.Tasks;
-using VirtualGrid.Enums;
 using VirtualGrid.Interfaces;
 
 namespace VirtualGrid.Razer
@@ -18,7 +11,7 @@ namespace VirtualGrid.Razer
     public class RazerKeyboardAdapter : RazerPeripheralBaseAdapter
     {
         //<inheritdoc/>
-        public override string Name => "RΛZΞR Chroma";
+        public override string Name => "RΛZΞR Keyboard";
 
         public override int RowCount => 6;
 

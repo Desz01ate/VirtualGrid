@@ -12,7 +12,7 @@ namespace VirtualGrid
     /// <summary>
     /// A mediator to arrange task between virtual grid and physical devices.
     /// </summary>
-    public sealed class PhysicalDeviceMediator : IArrangeMediator
+    public sealed class PhysicalDeviceMediator : IDeviceArrangeMediator
     {
         private readonly IDictionary<IPhysicalDeviceAdapter, (int X, int Y)> _adapters;
         private readonly IVirtualLedGrid _grid;
@@ -82,6 +82,12 @@ namespace VirtualGrid
                 var adapter = adapterPair.Key;
                 var (X, Y) = adapterPair.Value;
                 var slicedGrid = _grid.Slice(X, Y, adapter.ColumnCount, adapter.RowCount);
+                if (slicedGrid == null)
+                {
+                    tasks[idx] = Task.CompletedTask;
+                    continue;
+                }
+
                 var task = adapter.ApplyAsync(slicedGrid, cancellationToken);
                 tasks[idx] = task;
             }

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using VirtualGrid.Enums;
 using VirtualGrid.Interfaces;
 
 namespace VirtualGrid
@@ -127,15 +124,25 @@ namespace VirtualGrid
             return this.GetEnumerator();
         }
 
-        public IVirtualLedGrid Slice(int column, int row, int columnCount, int rowCount)
+        public IVirtualLedGrid? Slice(int column, int row, int columnCount, int rowCount)
         {
             var requestedColumn = column + columnCount;
             var requestedRow = row + rowCount;
-            if ((requestedColumn > this._totalColumnCount) || (requestedRow > this._totalRowCount))
+            if (requestedColumn > this._totalColumnCount)
             {
-                throw new ArgumentOutOfRangeException($"Column or row slice is exceed current grid dimension " +
-                                                      $"(maximum column is {this._totalColumnCount} and maximum row is {this._totalRowCount}), " +
-                                                      $"requested column is {requestedColumn} and requsted row is {requestedRow}");
+                requestedColumn = this._totalColumnCount - 1 - column;
+            }
+
+            if (requestedRow > this._totalRowCount)
+            {
+                requestedRow = this._totalRowCount - 1 - row;
+            }
+
+            //even after adjustment, still exceed grid dimension.
+            if (requestedColumn < 0 || this._totalColumnCount < requestedColumn ||
+                requestedRow < 0 || this._totalRowCount < requestedRow)
+            {
+                return null;
             }
 
             var grid = new IVirtualKey[rowCount][];
@@ -145,7 +152,7 @@ namespace VirtualGrid
                 var currentRow = subRow[rowIdx][column..requestedColumn];
                 grid[rowIdx] = currentRow;
             }
-            return new VirtualLedGrid(grid, columnCount, rowCount);
+            return new VirtualLedGrid(grid, requestedColumn - column, requestedRow - row);
         }
     }
 }

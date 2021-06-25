@@ -13,7 +13,7 @@ namespace VirtualGrid.Razer
     /// </summary
     public class RazerChromaLinkAdapter : RazerPeripheralBaseAdapter
     {
-        public override string Name => "RΛZΞR Chroma";
+        public override string Name => "RΛZΞR ChromaLink";
 
         public override int RowCount => 1;
 

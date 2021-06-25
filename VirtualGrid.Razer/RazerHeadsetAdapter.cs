@@ -13,7 +13,7 @@ namespace VirtualGrid.Razer
     /// </summary>
     public class RazerHeadsetAdapter : RazerPeripheralBaseAdapter
     {
-        public override string Name => "RΛZΞR Chroma";
+        public override string Name => "RΛZΞR Headset";
 
         public override int RowCount => 1;
 

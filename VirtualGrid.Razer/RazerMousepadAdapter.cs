@@ -16,7 +16,7 @@ namespace VirtualGrid.Razer
     public class RazerMousepadAdapter : RazerPeripheralBaseAdapter
     {
         //<inheritdoc/>
-        public override string Name => "RΛZΞR Chroma";
+        public override string Name => "RΛZΞR Mousepad";
 
         public override int RowCount => 1;
 

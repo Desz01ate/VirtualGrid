@@ -46,7 +46,7 @@ namespace VirtualGrid.Interfaces
         /// <param name="row">Start row index.</param>
         /// <param name="columnCount">Total column to slice.</param>
         /// <param name="rowCount">Total row to slice.</param>
-        /// <returns></returns>
-        IVirtualLedGrid Slice(int column, int row, int columnCount, int rowCount);
+        /// <returns>A sliced virtual LED grid if criteria is in proper range, otherwise null.</returns>
+        IVirtualLedGrid? Slice(int column, int row, int columnCount, int rowCount);
     }
 }

@@ -13,7 +13,7 @@ namespace VirtualGrid.Razer
     /// </summary>
     public sealed class RazerMouseAdapter : RazerPeripheralBaseAdapter
     {
-        public override string Name => "RΛZΞR Chroma";
+        public override string Name => "RΛZΞR Mouse";
 
         public override int RowCount => 9;
 

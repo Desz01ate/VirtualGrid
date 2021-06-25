@@ -14,7 +14,7 @@ namespace VirtualGrid.Razer
     /// </summary>
     public abstract class RazerPeripheralBaseAdapter : IPhysicalDeviceAdapter
     {
-        protected readonly IChroma ChromaInterface;
+        protected readonly IChroma? ChromaInterface;
         public abstract string Name { get; }
 
         public bool Initialized { get; private set; }
@@ -25,7 +25,7 @@ namespace VirtualGrid.Razer
 
         public abstract Task ApplyAsync(IVirtualLedGrid virtualGrid, CancellationToken cancellationToken = default);
 
-        public RazerPeripheralBaseAdapter()
+        internal RazerPeripheralBaseAdapter()
         {
             try
             {

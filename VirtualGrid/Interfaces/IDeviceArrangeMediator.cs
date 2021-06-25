@@ -7,7 +7,7 @@ namespace VirtualGrid.Interfaces
     /// <summary>
     /// A mediator to arrange task between virtual grid and physical devices.
     /// </summary>
-    public interface IArrangeMediator : IDisposable
+    public interface IDeviceArrangeMediator : IDisposable
     {
         /// <summary>
         /// Attach physical device adapter to mediator.

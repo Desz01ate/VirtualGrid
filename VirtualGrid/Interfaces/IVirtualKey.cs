@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using VirtualGrid.Enums;
-
-namespace VirtualGrid.Interfaces
+﻿namespace VirtualGrid.Interfaces
 {
     /// <summary>
     /// Virtual key that represent a physical key in virtual grid.
