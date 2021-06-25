@@ -17,20 +17,19 @@ namespace VirtualGrid.Asus
     {
         private readonly IAuraSdk2 _sdk;
         private readonly IAuraSyncDevice _notebookKeyboard;
-
+        private readonly AsusRogStrix_G15_2021_Representor _representor;
         //<inheritdoc/>
         public string Name => "Asus Rog Strix Laptop";
 
         //<inheritdoc/>
         public bool Initialized { get; }
 
-        public int RowCount => throw new NotImplementedException();
+        public int RowCount => 10;
 
-        public int ColumnCount => throw new NotImplementedException();
+        public int ColumnCount => 21;
 
         public AsusRogStrix_G15_2021_Adapter()
         {
-            throw new NotImplementedException($"Asus adapter is currently not support in this version.");
             try
             {
                 var sdk = (IAuraSdk2)new AuraSdk();
@@ -38,6 +37,7 @@ namespace VirtualGrid.Asus
                 var devices = sdk.Enumerate(528384);
                 this._sdk = sdk;
                 this._notebookKeyboard = devices.Count > 0 ? devices[0] : null;
+                this._representor = new AsusRogStrix_G15_2021_Representor();
                 this.Initialized = true;
             }
             catch (Exception)
@@ -49,9 +49,26 @@ namespace VirtualGrid.Asus
         // <inheritdoc/>
         public Task ApplyAsync(IVirtualLedGrid virtualGrid, CancellationToken cancellationToken = default)
         {
-            //if (!this.Initialized)
-            //    return Task.CompletedTask;
+            if (!this.Initialized)
+                return Task.CompletedTask;
 
+            for (var row = 0; row < virtualGrid.RowCount; row++)
+            {
+                for (var col = 0; col < virtualGrid.ColumnCount; col++)
+                {
+                    var asusKey = _representor[col, row];
+                    var asusKeyName = asusKey.ToString();
+                    if (asusKeyName.Contains("Invalid") || asusKey == RogStrixKeyboardKey.GhostKey)
+                    {
+                        continue;
+                    }
+                    var key = virtualGrid[col, row];
+                    var color = ToUint(key);
+                    _notebookKeyboard.Lights[(int)asusKey].Color = color;
+                }
+            }
+            _notebookKeyboard.Apply();
+            return Task.CompletedTask;
             //foreach (var key in virtualGrid.Where(x => x.Type != KeyType.Headset))
             //{
             //    var color = ToUint(key.Color);
@@ -106,13 +123,6 @@ namespace VirtualGrid.Asus
         public void Dispose()
         {
             this._sdk?.ReleaseControl(0);
-        }
-
-        private static RogStrixKeyboardKey KeyConvert(string name)
-        {
-            if (Maps.RogStrix_G15_2021Map.TryGetValue(name, out var v))
-                return (RogStrixKeyboardKey)v;
-            return RogStrixKeyboardKey.GhostKey;
         }
 
         private static uint ToUint(Color color)
