@@ -24,7 +24,7 @@ namespace VirtualGrid.Asus
         //<inheritdoc/>
         public bool Initialized { get; }
 
-        public int RowCount => 10;
+        public int RowCount => 9;
 
         public int ColumnCount => 21;
 
