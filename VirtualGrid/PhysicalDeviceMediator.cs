@@ -14,61 +14,62 @@ namespace VirtualGrid
     /// </summary>
     public sealed class PhysicalDeviceMediator : IArrangeMediator
     {
-        private readonly ICollection<IPhysicalDeviceAdapter> _adapters;
+        private readonly IDictionary<IPhysicalDeviceAdapter, (int X, int Y)> _adapters;
         private readonly IVirtualLedGrid _grid;
 
         private bool _disposed;
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="grid">An instance of virtual grid.</param>
         public PhysicalDeviceMediator(IVirtualLedGrid grid)
         {
             this._grid = grid ?? throw new ArgumentNullException(nameof(grid));
-            this._adapters = new List<IPhysicalDeviceAdapter>();
+            this._adapters = new Dictionary<IPhysicalDeviceAdapter, (int X, int Y)>();
         }
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="grid">An instance of virtual grid.</param>
-        /// <param name="adapters">An instance of collection of physical device adapters.</param>
-        public PhysicalDeviceMediator(IVirtualLedGrid grid, ICollection<IPhysicalDeviceAdapter> adapters)
-        {
-            this._grid = grid ?? throw new ArgumentNullException(nameof(grid));
-            this._adapters = adapters ?? new List<IPhysicalDeviceAdapter>();
-        }
-
-        /// <summary>
-        /// Attach physical device adapter to mediator.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        public void Attach<T>() where T : IPhysicalDeviceAdapter, new()
+        public void Attach<T>(int x, int y) where T : IPhysicalDeviceAdapter, new()
         {
             T adapter = new();
-            Attach(adapter);
+            Attach(x, y, adapter);
         }
 
-        /// <summary>
-        /// Attach physical device adapter to mediator.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        public void Attach(IPhysicalDeviceAdapter adapter)
+        public void Attach(int x, int y, IPhysicalDeviceAdapter adapter)
         {
+            if (x < 0 || y < 0)
+                throw new ArgumentOutOfRangeException($"Attach range must be at positive index.");
             if (adapter == null)
                 throw new ArgumentNullException(nameof(_adapters));
             if (!adapter.Initialized)
                 return;
 
-            this._adapters.Add(adapter);
+            this._adapters.Add(adapter, (x, y));
         }
 
-        /// <summary>
-        /// Apply rendered grid to physical devices.
-        /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+        public bool UpdateAdapterPosition<T>(int x, int y) where T : IPhysicalDeviceAdapter
+        {
+            if (x < 0 || y < 0)
+                throw new ArgumentOutOfRangeException($"Attach range must be at positive index.");
+
+            var adapter = this._adapters.SingleOrDefault(x => x.GetType() == typeof(T));
+            if (adapter.Key == null)
+            {
+                return false;
+            }
+
+            this._adapters[adapter.Key] = (x, y);
+            return true;
+        }
+
+        public IPhysicalDeviceAdapter? Detach<T>() where T : IPhysicalDeviceAdapter
+        {
+            var adapter = this._adapters.SingleOrDefault(x => x.GetType() == typeof(T)).Key;
+            if (adapter == null)
+            {
+                return null;
+            }
+
+            this._adapters.Remove(adapter);
+            return adapter;
+        }
+
         public Task ApplyAsync(CancellationToken cancellationToken = default)
         {
             if (!_grid.Any())
@@ -77,8 +78,11 @@ namespace VirtualGrid
             var tasks = new Task[_adapters.Count];
             for (var idx = 0; idx < _adapters.Count; idx++)
             {
-                var adapter = _adapters.ElementAt(idx);
-                var task = adapter.ApplyAsync(this._grid, cancellationToken);
+                var adapterPair = _adapters.ElementAt(idx);
+                var adapter = adapterPair.Key;
+                var (X, Y) = adapterPair.Value;
+                var slicedGrid = _grid.Slice(X, Y, adapter.ColumnCount, adapter.RowCount);
+                var task = adapter.ApplyAsync(slicedGrid, cancellationToken);
                 tasks[idx] = task;
             }
             return Task.WhenAll(tasks);
@@ -91,7 +95,7 @@ namespace VirtualGrid
 
             if (disposing)
             {
-                foreach (var adapter in this._adapters)
+                foreach (var adapter in this._adapters.Keys)
                 {
                     adapter.Dispose();
                 }

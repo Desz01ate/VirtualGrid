@@ -24,8 +24,13 @@ namespace VirtualGrid.Asus
         //<inheritdoc/>
         public bool Initialized { get; }
 
+        public int RowCount => throw new NotImplementedException();
+
+        public int ColumnCount => throw new NotImplementedException();
+
         public AsusRogStrix_G15_2021_Adapter()
         {
+            throw new NotImplementedException($"Asus adapter is currently not support in this version.");
             try
             {
                 var sdk = (IAuraSdk2)new AuraSdk();
@@ -44,57 +49,57 @@ namespace VirtualGrid.Asus
         // <inheritdoc/>
         public Task ApplyAsync(IVirtualLedGrid virtualGrid, CancellationToken cancellationToken = default)
         {
-            if (!this.Initialized)
-                return Task.CompletedTask;
+            //if (!this.Initialized)
+            //    return Task.CompletedTask;
 
-            foreach (var key in virtualGrid.Where(x => x.Type != KeyType.Headset))
-            {
-                var color = ToUint(key.Color);
-                switch (key.FriendlyName)
-                {
-                    case "Enter":
-                        _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.OemEnterLed0].Color = color;
-                        _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.OemEnterLed1].Color = color;
-                        _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.OemEnterLed2].Color = color;
-                        break;
-                    case "RightShift":
-                        _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.RightShiftLed0].Color = color;
-                        _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.RightShiftLed1].Color = color;
-                        _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.RightShiftLed2].Color = color;
-                        break;
-                    case "Backspace":
-                        _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.BackspaceLed0].Color = color;
-                        _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.BackspaceLed1].Color = color;
-                        _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.BackspaceLed2].Color = color;
-                        break;
-                    case "Space":
-                        _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.SpaceLed0].Color = color;
-                        _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.SpaceLed1].Color = color;
-                        _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.SpaceLed2].Color = color;
-                        _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.SpaceLed3].Color = color;
-                        break;
-                    case "ExtraLed2":
-                        _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.LedBar2].Color = color;
-                        _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.LedBar3].Color = color;
-                        break;
-                    case "ExtraLed3":
-                        _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.LedBar3].Color = color;
-                        _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.LedBar4].Color = color;
-                        break;
-                    default:
-                        var asusKey = KeyConvert(key.FriendlyName);
-                        if (asusKey == RogStrixKeyboardKey.GhostKey)
-                            continue;
+            //foreach (var key in virtualGrid.Where(x => x.Type != KeyType.Headset))
+            //{
+            //    var color = ToUint(key.Color);
+            //    switch (key.FriendlyName)
+            //    {
+            //        case "Enter":
+            //            _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.OemEnterLed0].Color = color;
+            //            _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.OemEnterLed1].Color = color;
+            //            _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.OemEnterLed2].Color = color;
+            //            break;
+            //        case "RightShift":
+            //            _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.RightShiftLed0].Color = color;
+            //            _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.RightShiftLed1].Color = color;
+            //            _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.RightShiftLed2].Color = color;
+            //            break;
+            //        case "Backspace":
+            //            _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.BackspaceLed0].Color = color;
+            //            _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.BackspaceLed1].Color = color;
+            //            _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.BackspaceLed2].Color = color;
+            //            break;
+            //        case "Space":
+            //            _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.SpaceLed0].Color = color;
+            //            _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.SpaceLed1].Color = color;
+            //            _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.SpaceLed2].Color = color;
+            //            _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.SpaceLed3].Color = color;
+            //            break;
+            //        case "ExtraLed2":
+            //            _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.LedBar2].Color = color;
+            //            _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.LedBar3].Color = color;
+            //            break;
+            //        case "ExtraLed3":
+            //            _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.LedBar3].Color = color;
+            //            _notebookKeyboard.Lights[(int)RogStrixKeyboardKey.LedBar4].Color = color;
+            //            break;
+            //        default:
+            //            var asusKey = KeyConvert(key.FriendlyName);
+            //            if (asusKey == RogStrixKeyboardKey.GhostKey)
+            //                continue;
 
-                        var led = _notebookKeyboard.Lights[(int)asusKey];
-                        if (led == null)
-                            continue;
-                        led.Color = color;
-                        break;
-                }
+            //            var led = _notebookKeyboard.Lights[(int)asusKey];
+            //            if (led == null)
+            //                continue;
+            //            led.Color = color;
+            //            break;
+            //    }
 
-            }
-            _notebookKeyboard.Apply();
+            //}
+            //_notebookKeyboard.Apply();
             return Task.CompletedTask;
         }
 

@@ -38,5 +38,15 @@ namespace VirtualGrid.Interfaces
         /// </summary>
         /// <param name="colors"></param>
         void Set(Color[][] colors);
+
+        /// <summary>
+        /// Take a slice grid within given criteria.
+        /// </summary>
+        /// <param name="column">Start column index.</param>
+        /// <param name="row">Start row index.</param>
+        /// <param name="columnCount">Total column to slice.</param>
+        /// <param name="rowCount">Total row to slice.</param>
+        /// <returns></returns>
+        IVirtualLedGrid Slice(int column, int row, int columnCount, int rowCount);
     }
 }
