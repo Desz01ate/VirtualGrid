@@ -15,7 +15,7 @@ namespace VirtualGrid.Interfaces
         /// <param name="column">Specific column.</param>
         /// <param name="row">Specific row.</param>
         /// <returns><seealso cref="Color"/></returns>
-        Color this[int column, int row] { get; set; }
+        Color? this[int column, int row] { get; set; }
 
         /// <summary>
         /// Row count for virtual grid.
@@ -31,22 +31,12 @@ namespace VirtualGrid.Interfaces
         /// Set a single color to all keys.
         /// </summary>
         /// <param name="color"></param>
-        void Set(Color color);
+        void Set(Color? color);
 
         /// <summary>
         /// Set per-key color.
         /// </summary>
         /// <param name="colors"></param>
-        void Set(Color[][] colors);
-
-        /// <summary>
-        /// Take a slice grid within given criteria.
-        /// </summary>
-        /// <param name="column">Start column index.</param>
-        /// <param name="row">Start row index.</param>
-        /// <param name="columnCount">Total column to slice.</param>
-        /// <param name="rowCount">Total row to slice.</param>
-        /// <returns>A sliced virtual LED grid if criteria is in proper range, otherwise null.</returns>
-        IVirtualLedGrid? Slice(int column, int row, int columnCount, int rowCount);
+        void Set(Color?[][] colors);
     }
 }

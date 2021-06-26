@@ -9,15 +9,15 @@ namespace VirtualGrid
     /// <summary>
     /// A virtual LED grid that represent the physical setup.
     /// </summary>
-    public sealed class VirtualLedGrid : IVirtualLedGrid
+    public sealed class VirtualLedGrid : BaseVirtualLedGrid
     {
         class VirtualKey : IVirtualKey
         {
             public (int X, int Y) Index { get; }
 
-            public Color Color { get; set; }
+            public Color? Color { get; set; }
 
-            public VirtualKey(int x, int y, Color color = default)
+            public VirtualKey(int x, int y, Color? color = default)
             {
                 this.Index = (x, y);
                 this.Color = color;
@@ -25,7 +25,7 @@ namespace VirtualGrid
 
             public override string ToString()
             {
-                return $"({Index.X},{Index.Y}): {Color.Value}";
+                return $"({Index.X},{Index.Y}): {Color?.ToString() ?? "Transparent"}";
             }
         }
 
@@ -33,9 +33,9 @@ namespace VirtualGrid
         private readonly int _totalColumnCount;
         private readonly IVirtualKey[][] _grid;
 
-        public int RowCount => _totalRowCount;
+        public override int RowCount => _totalRowCount;
 
-        public int ColumnCount => _totalColumnCount;
+        public override int ColumnCount => _totalColumnCount;
 
         /// <summary>
         /// Indexer for accesing color of the virtual grid using specific index.
@@ -43,7 +43,7 @@ namespace VirtualGrid
         /// <param name="column">Specific column.</param>
         /// <param name="row">Specific row.</param>
         /// <returns><seealso cref="Color"/></returns>
-        public Color this[int column, int row]
+        public override Color? this[int column, int row]
         {
             get
             {
@@ -87,7 +87,7 @@ namespace VirtualGrid
         /// Set a single color to all keys.
         /// </summary>
         /// <param name="color"></param>
-        public void Set(Color color)
+        public override void Set(Color? color)
         {
             foreach (var row in this._grid)
                 foreach (var key in row)
@@ -98,7 +98,7 @@ namespace VirtualGrid
         /// Set per-key color.
         /// </summary>
         /// <param name="colors"></param>
-        public void Set(Color[][] colors)
+        public override void Set(Color?[][] colors)
         {
             if (colors == null)
                 throw new ArgumentNullException(nameof(colors));
@@ -113,19 +113,14 @@ namespace VirtualGrid
             }
         }
 
-        public IEnumerator<IVirtualKey> GetEnumerator()
+        public override IEnumerator<IVirtualKey> GetEnumerator()
         {
             foreach (var row in this._grid)
                 foreach (var key in row)
                     yield return key;
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this.GetEnumerator();
-        }
-
-        public IVirtualLedGrid? Slice(int column, int row, int columnCount, int rowCount)
+        internal protected override IVirtualLedGrid? Slice(int column, int row, int columnCount, int rowCount)
         {
             var grid = new IVirtualKey[rowCount][];
             var subRow = this._grid.Skip(row).Take(rowCount).ToArray();

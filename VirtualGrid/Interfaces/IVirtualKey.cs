@@ -14,6 +14,6 @@
         /// <summary>
         /// Color of key.
         /// </summary>
-        Color Color { get; set; }
+        Color? Color { get; set; }
     }
 }

@@ -87,7 +87,7 @@ namespace VirtualGrid.Asus
                         continue;
                     }
                     var key = virtualGrid[col, row];
-                    var color = ToUint(key);
+                    var color = ToUint(key.Value);
                     _notebookKeyboard.Lights[(int)asusKey].Color = color;
                 }
             }

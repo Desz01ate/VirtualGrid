@@ -33,7 +33,7 @@ namespace VirtualGrid.Razer
                 if (keyIdx++ % 2 != 0) //create a gap between L and R
                     continue;
 
-                headset[actualIdx++] = ToColoreColor(key.Color);
+                headset[actualIdx++] = ToColoreColor(key.Color.Value);
             }
 
             await this.ChromaInterface.Headset.SetCustomAsync(headset);

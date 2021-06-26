@@ -15,13 +15,33 @@ namespace VirtualGrid
     public sealed class PhysicalDeviceMediator : IDeviceArrangeMediator
     {
         private readonly IDictionary<IPhysicalDeviceAdapter, (int X, int Y)> _adapters;
-        private readonly IVirtualLedGrid _grid;
+        private readonly ICollection<BaseVirtualLedGrid> _grids;
 
         private bool _disposed;
 
-        public PhysicalDeviceMediator(IVirtualLedGrid grid)
+        public PhysicalDeviceMediator(IVirtualLedGrid grid) : this(grid as BaseVirtualLedGrid)
         {
-            this._grid = grid ?? throw new ArgumentNullException(nameof(grid));
+        }
+
+        public PhysicalDeviceMediator(params IVirtualLedGrid[] grids) : this(grids as BaseVirtualLedGrid[])
+        {
+        }
+
+        public PhysicalDeviceMediator(BaseVirtualLedGrid grid)
+        {
+            if (grid == null)
+                throw new ArgumentNullException(nameof(grid));
+
+            this._grids = new BaseVirtualLedGrid[1] { grid };
+            this._adapters = new Dictionary<IPhysicalDeviceAdapter, (int X, int Y)>();
+        }
+
+        public PhysicalDeviceMediator(params BaseVirtualLedGrid[] grids)
+        {
+            if (grids == null || !grids.Any())
+                throw new ArgumentNullException(nameof(grids));
+
+            this._grids = grids;
             this._adapters = new Dictionary<IPhysicalDeviceAdapter, (int X, int Y)>();
         }
 
@@ -72,7 +92,9 @@ namespace VirtualGrid
 
         public Task ApplyAsync(CancellationToken cancellationToken = default)
         {
-            if (!_grid.Any())
+            var grid = this._grids.Aggregate((x, y) => x + y);
+
+            if (!grid.Any())
                 return Task.CompletedTask;
 
             var tasks = new Task[_adapters.Count];
@@ -81,7 +103,7 @@ namespace VirtualGrid
                 var adapterPair = _adapters.ElementAt(idx);
                 var adapter = adapterPair.Key;
                 var (X, Y) = adapterPair.Value;
-                var slicedGrid = _grid.Slice(X, Y, adapter.ColumnCount, adapter.RowCount);
+                var slicedGrid = grid.Slice(X, Y, adapter.ColumnCount, adapter.RowCount);
                 if (slicedGrid == null)
                 {
                     tasks[idx] = Task.CompletedTask;
