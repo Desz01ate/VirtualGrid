@@ -1,4 +1,5 @@
 # VirtualGrid
+[![nuget](https://img.shields.io/nuget/v/VirtualGrid.svg)](https://www.nuget.org/packages/VirtualGrid/)
 A library to simplify RGB tasks when working with multiple devices and vendors by create single lightweight abstract LED array
 and convert into device or vendor specific implementation via adapter at later state.
 
@@ -39,4 +40,25 @@ virtualGrid.Set(VirtualGrid.Color.Red);
 
 // Apply virtual effect into all connected adapters.
 await mediator.ApplyAsync();
+```
+
+From version 2.1 onward you can create multiple virtual LED grid and combine them into a single grid like this.
+
+```cs
+IVirtualLedGrid layer1 = new VirtualLedGrid(30, 9);
+IVirtualLedGrid layer2 = new VirtualLedGrid(30, 9);
+IVirtualLedGrid layer3 = new VirtualLedGrid(15, 5);
+
+layer1.Set(VirtualGrid.Color.Red);
+layer2[0,0] = Color.Blue;
+layer3[0,1] = Color.White;
+
+// Merge them manually using + operator.
+layer1 += layer2;
+layer1 += layer3;
+
+// Or attach them to mediator just like single grid and let the mediator handle the job instead.
+IDeviceArrangeMediator mediator = new VirtualGrid.PhysicalDeviceMediator(layer1, layer2, layer3);
+
+//Then apply the grid to adapter whatever way you want, manually or mediator will work just fine.
 ```

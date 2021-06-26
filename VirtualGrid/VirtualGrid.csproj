@@ -11,6 +11,7 @@
     <RepositoryUrl>https://github.com/Desz01ate/VirtualGrid</RepositoryUrl>
     <PackageReleaseNotes>This release contains code update to support multiple layers on mediator.
 This version is not compatible backward with v.2.0 because virtual grid and virtual key now treat their color as nullable and will require you to update code a little bit if you upgrade from v.2.0.</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

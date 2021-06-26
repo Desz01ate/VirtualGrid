@@ -12,6 +12,7 @@ This release contains code update to support VirtualGrid v.2.1.</PackageReleaseN
     <PackageProjectUrl>https://github.com/Desz01ate/VirtualGrid</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Desz01ate/VirtualGrid</RepositoryUrl>
     <Description>An adapter to convert VirtualGrid to Asus-compatible devices.</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

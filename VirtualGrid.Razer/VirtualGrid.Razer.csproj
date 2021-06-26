@@ -11,6 +11,7 @@
     <PackageReleaseNotes>This release contains code update to support VirtualGrid v.2.1.</PackageReleaseNotes>
     <PackageLicenseExpression></PackageLicenseExpression>
     <Description>An adapter to convert VirtualGrid to Razer-compatible devices.</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

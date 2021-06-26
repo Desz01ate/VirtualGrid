@@ -9,5 +9,28 @@
             An adapter to convert <see cref="T:VirtualGrid.Interfaces.IVirtualLedGrid"/> into Asus Rog Strix G15 (2021) compatible effect.
             </summary>
         </member>
+        <member name="P:VirtualGrid.Asus.AsusRogStrix_G15_2021_Adapter.Name">
+            <inheritdoc/>
+        </member>
+        <member name="P:VirtualGrid.Asus.AsusRogStrix_G15_2021_Adapter.Initialized">
+            <inheritdoc/>
+        </member>
+        <member name="P:VirtualGrid.Asus.AsusRogStrix_G15_2021_Adapter.RowCount">
+            <inheritdoc/>
+        </member>
+        <member name="P:VirtualGrid.Asus.AsusRogStrix_G15_2021_Adapter.ColumnCount">
+            <inheritdoc/>
+        </member>
+        <member name="M:VirtualGrid.Asus.AsusRogStrix_G15_2021_Adapter.#ctor">
+            <summary>
+            Constructor for ASUS Rog Strix G15 (2021) laptop adapter.
+            </summary>
+        </member>
+        <member name="M:VirtualGrid.Asus.AsusRogStrix_G15_2021_Adapter.ApplyAsync(VirtualGrid.Interfaces.IVirtualLedGrid,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VirtualGrid.Asus.AsusRogStrix_G15_2021_Adapter.Dispose">
+            <inheritdoc/>
+        </member>
     </members>
 </doc>

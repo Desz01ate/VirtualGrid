@@ -30,6 +30,46 @@
             the color. On the form <c>0xKKBBGGRR</c>.
             </summary>
         </member>
+        <member name="M:VirtualGrid.Color.#ctor(System.UInt32)">
+            <summary>
+            Constructor for Color with uint value.
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:VirtualGrid.Color.#ctor(System.Byte,System.Byte,System.Byte)">
+            <summary>
+            Constructor for Color with R,G, and B as byte.
+            </summary>
+            <param name="red"></param>
+            <param name="green"></param>
+            <param name="blue"></param>
+        </member>
+        <member name="M:VirtualGrid.Color.#ctor(System.Single,System.Single,System.Single)">
+            <summary>
+            Constructor for Color with R,G, and B as float.
+            </summary>
+            <param name="red"></param>
+            <param name="green"></param>
+            <param name="blue"></param>
+        </member>
+        <member name="M:VirtualGrid.Color.#ctor(System.Double,System.Double,System.Double)">
+            <summary>
+            Constructor for Color with R,G, and B as double.
+            </summary>
+            <param name="red"></param>
+            <param name="green"></param>
+            <param name="blue"></param>
+        </member>
+        <member name="M:VirtualGrid.Color.FromRgb(System.UInt32)">
+            <summary>
+            Create color instance from uint value.
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtualGrid.Color.ToString">
+            <inheritdoc/>
+        </member>
         <member name="F:VirtualGrid.Color.Black">
             <summary>
             Black color.
@@ -221,15 +261,54 @@
             <param name="rowCount">Total row to slice.</param>
             <returns>A sliced virtual LED grid if criteria is in proper range, otherwise null.</returns>
         </member>
+        <member name="M:VirtualGrid.Interfaces.IVirtualLedGrid.op_Addition(VirtualGrid.Interfaces.IVirtualLedGrid,VirtualGrid.Interfaces.IVirtualLedGrid)">
+            <inheritdoc/>
+        </member>
         <member name="T:VirtualGrid.PhysicalDeviceMediator">
             <summary>
             A mediator to arrange task between virtual grids and physical devices.
             </summary>
         </member>
+        <member name="M:VirtualGrid.PhysicalDeviceMediator.#ctor(VirtualGrid.Interfaces.IVirtualLedGrid)">
+            <summary>
+            Constructor for physical device mediator with single virtual LED grid.
+            </summary>
+            <param name="grid"></param>
+        </member>
+        <member name="M:VirtualGrid.PhysicalDeviceMediator.#ctor(VirtualGrid.Interfaces.IVirtualLedGrid[])">
+            <summary>
+            Constructor for physical device mediator with multiple virtual LED grids.
+            </summary>
+            <param name="grids"></param>
+        </member>
+        <member name="M:VirtualGrid.PhysicalDeviceMediator.Attach``1(System.Int32,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VirtualGrid.PhysicalDeviceMediator.Attach(System.Int32,System.Int32,VirtualGrid.Interfaces.IPhysicalDeviceAdapter)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VirtualGrid.PhysicalDeviceMediator.UpdateAdapterPosition``1(System.Int32,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VirtualGrid.PhysicalDeviceMediator.Detach``1">
+            <inheritdoc/>
+        </member>
+        <member name="M:VirtualGrid.PhysicalDeviceMediator.ApplyAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VirtualGrid.PhysicalDeviceMediator.Dispose">
+            <inheritdoc/>
+        </member>
         <member name="T:VirtualGrid.VirtualLedGrid">
             <summary>
             A virtual LED grid that represent the physical setup.
             </summary>
+        </member>
+        <member name="P:VirtualGrid.VirtualLedGrid.RowCount">
+            <inheritdoc/>
+        </member>
+        <member name="P:VirtualGrid.VirtualLedGrid.ColumnCount">
+            <inheritdoc/>
         </member>
         <member name="P:VirtualGrid.VirtualLedGrid.Item(System.Int32,System.Int32)">
             <summary>
@@ -255,6 +334,18 @@
             Set per-key color.
             </summary>
             <param name="colors"></param>
+        </member>
+        <member name="M:VirtualGrid.VirtualLedGrid.Clear">
+            <inheritdoc/>
+        </member>
+        <member name="M:VirtualGrid.VirtualLedGrid.Slice(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VirtualGrid.VirtualLedGrid.GetEnumerator">
+            <inheritdoc/>
+        </member>
+        <member name="M:VirtualGrid.VirtualLedGrid.op_Addition(VirtualGrid.VirtualLedGrid,VirtualGrid.VirtualLedGrid)">
+            <inheritdoc/>
         </member>
     </members>
 </doc>
