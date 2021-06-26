@@ -21,6 +21,8 @@ namespace VirtualGrid
 
         public abstract void Set(Color?[][] colors);
 
+        public abstract void Clear();
+
         /// <summary>
         /// Take a slice grid within given criteria.
         /// </summary>
@@ -46,16 +48,13 @@ namespace VirtualGrid
             var gridZip = ledGrid.Zip(anotherVirtualGrid, (l, r) => (Layer1: l, Layer2: r));
             foreach (var pair in gridZip)
             {
-                var top = pair.Layer1;
-                var bottom = pair.Layer2;
+                var top = pair.Layer2;
+                var bottom = pair.Layer1;
 
-                if (top == null)
-                    continue;
-
-                if (bottom == null || bottom.Color == null)
-                    continue;
-
-                top.Color ??= bottom.Color;
+                if (top?.Color != null)
+                {
+                    bottom.Color = top.Color;
+                }
             }
             return ledGrid;
         }

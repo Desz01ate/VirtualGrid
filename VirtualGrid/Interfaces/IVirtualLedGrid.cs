@@ -38,5 +38,10 @@ namespace VirtualGrid.Interfaces
         /// </summary>
         /// <param name="colors"></param>
         void Set(Color?[][] colors);
+
+        /// <summary>
+        /// Clear color from all keys.
+        /// </summary>
+        void Clear();
     }
 }

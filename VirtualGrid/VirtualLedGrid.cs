@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using VirtualGrid.Interfaces;
@@ -110,6 +109,14 @@ namespace VirtualGrid
                 {
                     this[x, y] = row[x];
                 }
+            }
+        }
+
+        public override void Clear()
+        {
+            foreach (var key in this)
+            {
+                key.Color = null;
             }
         }
 
