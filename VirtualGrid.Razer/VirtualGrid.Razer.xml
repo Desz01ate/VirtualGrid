@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>VirtualGrid.Razer</name>
+    </assembly>
+    <members>
+        <!-- Badly formed XML comment ignored for member "T:VirtualGrid.Razer.RazerChromaLinkAdapter" -->
+        <member name="T:VirtualGrid.Razer.RazerHeadsetAdapter">
+            <summary>
+            An adapter to convert <see cref="T:VirtualGrid.Interfaces.IVirtualLedGrid"/> into Razer-compatible headset effects.
+            </summary>
+        </member>
+        <member name="T:VirtualGrid.Razer.RazerKeyboardAdapter">
+            <summary>
+            An adapter to convert <see cref="T:VirtualGrid.Interfaces.IVirtualLedGrid"/> into Razer-compatible keyboard effects.
+            </summary>
+        </member>
+        <member name="T:VirtualGrid.Razer.RazerMouseAdapter">
+            <summary>
+            An adapter to convert <see cref="T:VirtualGrid.Interfaces.IVirtualLedGrid"/> into Razer-compatible mouse effects.
+            </summary>
+        </member>
+        <member name="T:VirtualGrid.Razer.RazerMousepadAdapter">
+            <summary>
+            An adapter to convert <see cref="T:VirtualGrid.Interfaces.IVirtualLedGrid"/> into Razer-compatible mousepad effects.
+            </summary>
+        </member>
+        <member name="T:VirtualGrid.Razer.RazerPeripheralBaseAdapter">
+            <summary>
+            An abstract adapter to convert <see cref="T:VirtualGrid.Interfaces.IVirtualLedGrid"/> into Razer-compatible effects.
+            For more information about Razer Chroma LED profile : https://developer.razer.com/works-with-chroma/razer-chroma-led-profiles/
+            </summary>
+        </member>
+    </members>
+</doc>
