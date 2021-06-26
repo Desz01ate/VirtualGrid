@@ -4,11 +4,12 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
-    <Version>2.0</Version>
+    <Version>2.0.1</Version>
     <Description>A library to simplify RGB tasks when working with multiple devices and vendors by create single lightweight abstract LED array and convert into device or vendor specific implementation via adapter at later state.</Description>
     <Copyright>Copyright © Chanvut Booneid 2021</Copyright>
     <PackageProjectUrl>https://github.com/Desz01ate/VirtualGrid</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Desz01ate/VirtualGrid</RepositoryUrl>
+    <PackageReleaseNotes>This release contains code update to address issue on VirtualGrid.Slice not working correctly.</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -18,10 +19,6 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <DocumentationFile>G:\Documents\GitHub\ListenerX\Submodules\VirtualGrid\VirtualGrid\VirtualGrid.xml</DocumentationFile>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="System.Buffers" Version="4.5.1" />
-  </ItemGroup>
-
 </Project>
