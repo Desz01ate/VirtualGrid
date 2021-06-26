@@ -15,9 +15,9 @@ namespace VirtualGrid
         {
             public (int X, int Y) Index { get; }
 
-            public Color Color { get; set; }
+            public Color? Color { get; set; }
 
-            public VirtualKey(int x, int y, Color color = default)
+            public VirtualKey(int x, int y, Color? color = default)
             {
                 this.Index = (x, y);
                 this.Color = color;
@@ -25,7 +25,7 @@ namespace VirtualGrid
 
             public override string ToString()
             {
-                return $"({Index.X},{Index.Y}): {Color.Value}";
+                return $"({Index.X},{Index.Y}): {Color?.ToString() ?? "Transparent"}";
             }
         }
 
@@ -33,8 +33,10 @@ namespace VirtualGrid
         private readonly int _totalColumnCount;
         private readonly IVirtualKey[][] _grid;
 
+        /// <inheritdoc/>
         public int RowCount => _totalRowCount;
 
+        /// <inheritdoc/>
         public int ColumnCount => _totalColumnCount;
 
         /// <summary>
@@ -43,7 +45,7 @@ namespace VirtualGrid
         /// <param name="column">Specific column.</param>
         /// <param name="row">Specific row.</param>
         /// <returns><seealso cref="Color"/></returns>
-        public Color this[int column, int row]
+        public Color? this[int column, int row]
         {
             get
             {
@@ -87,7 +89,7 @@ namespace VirtualGrid
         /// Set a single color to all keys.
         /// </summary>
         /// <param name="color"></param>
-        public void Set(Color color)
+        public void Set(Color? color)
         {
             foreach (var row in this._grid)
                 foreach (var key in row)
@@ -98,7 +100,7 @@ namespace VirtualGrid
         /// Set per-key color.
         /// </summary>
         /// <param name="colors"></param>
-        public void Set(Color[][] colors)
+        public void Set(Color?[][] colors)
         {
             if (colors == null)
                 throw new ArgumentNullException(nameof(colors));
@@ -113,6 +115,29 @@ namespace VirtualGrid
             }
         }
 
+        /// <inheritdoc/>
+        public void Clear()
+        {
+            foreach (var key in this)
+            {
+                key.Color = null;
+            }
+        }
+
+        /// <inheritdoc/>
+        public IVirtualLedGrid? Slice(int column, int row, int columnCount, int rowCount)
+        {
+            var grid = new IVirtualKey[rowCount][];
+            var subRow = this._grid.Skip(row).Take(rowCount).ToArray();
+            for (var rowIdx = 0; rowIdx < subRow.Length; rowIdx++)
+            {
+                var currentRow = subRow[rowIdx].Skip(column).Take(columnCount).ToArray();
+                grid[rowIdx] = currentRow;
+            }
+            return new VirtualLedGrid(grid, grid.First().Length, subRow.Length);
+        }
+
+        /// <inheritdoc/>
         public IEnumerator<IVirtualKey> GetEnumerator()
         {
             foreach (var row in this._grid)
@@ -125,16 +150,13 @@ namespace VirtualGrid
             return this.GetEnumerator();
         }
 
-        public IVirtualLedGrid? Slice(int column, int row, int columnCount, int rowCount)
+        /// <inheritdoc/>
+        public static VirtualLedGrid operator +(VirtualLedGrid? grid, VirtualLedGrid? anotherGrid)
         {
-            var grid = new IVirtualKey[rowCount][];
-            var subRow = this._grid.Skip(row).Take(rowCount).ToArray();
-            for (var rowIdx = 0; rowIdx < subRow.Length; rowIdx++)
-            {
-                var currentRow = subRow[rowIdx].Skip(column).Take(columnCount).ToArray();
-                grid[rowIdx] = currentRow;
-            }
-            return new VirtualLedGrid(grid, grid.First().Length, subRow.Length);
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+            var resultGrid = (IVirtualLedGrid)grid + (IVirtualLedGrid)anotherGrid;
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+            return (VirtualLedGrid)resultGrid;
         }
     }
 }

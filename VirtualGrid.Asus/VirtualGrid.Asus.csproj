@@ -5,7 +5,9 @@
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
     <Version>2.0</Version>
-    <PackageReleaseNotes>** You need to manually copy Interop.AuraServiceLib.dll in package directory to output directory to make this library works. **</PackageReleaseNotes>
+    <PackageReleaseNotes>** You need to manually copy Interop.AuraServiceLib.dll in package directory to output directory to make this library works. **
+
+This release contains code update to support VirtualGrid v.2.1.</PackageReleaseNotes>
     <Copyright>Copyright © Chanvut Booneid 2021</Copyright>
     <PackageProjectUrl>https://github.com/Desz01ate/VirtualGrid</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Desz01ate/VirtualGrid</RepositoryUrl>
@@ -15,6 +17,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>G:\Documents\GitHub\ListenerX\Submodules\VirtualGrid\VirtualGrid.Asus\VirtualGrid.Asus.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

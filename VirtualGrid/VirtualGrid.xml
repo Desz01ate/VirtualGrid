@@ -194,17 +194,22 @@
             Column count for virtual grid.
             </summary>
         </member>
-        <member name="M:VirtualGrid.Interfaces.IVirtualLedGrid.Set(VirtualGrid.Color)">
+        <member name="M:VirtualGrid.Interfaces.IVirtualLedGrid.Set(System.Nullable{VirtualGrid.Color})">
             <summary>
             Set a single color to all keys.
             </summary>
             <param name="color"></param>
         </member>
-        <member name="M:VirtualGrid.Interfaces.IVirtualLedGrid.Set(VirtualGrid.Color[][])">
+        <member name="M:VirtualGrid.Interfaces.IVirtualLedGrid.Set(System.Nullable{VirtualGrid.Color}[][])">
             <summary>
             Set per-key color.
             </summary>
             <param name="colors"></param>
+        </member>
+        <member name="M:VirtualGrid.Interfaces.IVirtualLedGrid.Clear">
+            <summary>
+            Clear color from all keys.
+            </summary>
         </member>
         <member name="M:VirtualGrid.Interfaces.IVirtualLedGrid.Slice(System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
@@ -218,7 +223,7 @@
         </member>
         <member name="T:VirtualGrid.PhysicalDeviceMediator">
             <summary>
-            A mediator to arrange task between virtual grid and physical devices.
+            A mediator to arrange task between virtual grids and physical devices.
             </summary>
         </member>
         <member name="T:VirtualGrid.VirtualLedGrid">
@@ -239,13 +244,13 @@
             Constructor.
             </summary>
         </member>
-        <member name="M:VirtualGrid.VirtualLedGrid.Set(VirtualGrid.Color)">
+        <member name="M:VirtualGrid.VirtualLedGrid.Set(System.Nullable{VirtualGrid.Color})">
             <summary>
             Set a single color to all keys.
             </summary>
             <param name="color"></param>
         </member>
-        <member name="M:VirtualGrid.VirtualLedGrid.Set(VirtualGrid.Color[][])">
+        <member name="M:VirtualGrid.VirtualLedGrid.Set(System.Nullable{VirtualGrid.Color}[][])">
             <summary>
             Set per-key color.
             </summary>

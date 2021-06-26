@@ -13,12 +13,16 @@ namespace VirtualGrid.Razer
     /// </summary>
     public class RazerHeadsetAdapter : RazerPeripheralBaseAdapter
     {
+        /// <inheritdoc/>
         public override string Name => "RΛZΞR Headset";
 
+        /// <inheritdoc/>
         public override int RowCount => 1;
 
+        /// <inheritdoc/>
         public override int ColumnCount => 3;
 
+        /// <inheritdoc/>
         public override async Task ApplyAsync(IVirtualLedGrid virtualGrid, CancellationToken cancellationToken = default)
         {
             if (!this.Initialized)
@@ -28,15 +32,20 @@ namespace VirtualGrid.Razer
 
             var actualIdx = 0;
             var keyIdx = 0;
-            foreach (var key in virtualGrid)
+            foreach (var cell in virtualGrid)
             {
                 if (keyIdx++ % 2 != 0) //create a gap between L and R
                     continue;
+                if (cell.Color == null)
+                    continue;
 
-                headset[actualIdx++] = ToColoreColor(key.Color);
+                headset[actualIdx++] = ToColoreColor(cell.Color.Value);
             }
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             await this.ChromaInterface.Headset.SetCustomAsync(headset);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+
         }
     }
 }

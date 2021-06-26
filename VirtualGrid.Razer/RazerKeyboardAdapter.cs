@@ -28,7 +28,7 @@ namespace VirtualGrid.Razer
             {
                 for (var col = 0; col < virtualGrid.ColumnCount; col++)
                 {
-                    keyboardGrid[row, col] = ToColoreColor(virtualGrid[col, row]);
+                    keyboardGrid[row, col] = ToColoreColor(virtualGrid[col, row].Value);
                 }
             }
 

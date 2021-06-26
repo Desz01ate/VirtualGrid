@@ -30,7 +30,7 @@ namespace VirtualGrid.Razer
             {
                 for (var col = 0; col < virtualGrid.ColumnCount; col++)
                 {
-                    mouseGrid[row, col] = ToColoreColor(virtualGrid[col, row]);
+                    mouseGrid[row, col] = ToColoreColor(virtualGrid[col, row].Value);
                 }
             }
 

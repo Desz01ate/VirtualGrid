@@ -32,7 +32,7 @@ namespace VirtualGrid.Razer
             var keyIdx = 0;
             foreach (var key in virtualGrid.Reverse())
             {
-                mousepadGrid[keyIdx++] = ToColoreColor(key.Color);
+                mousepadGrid[keyIdx++] = ToColoreColor(key.Color.Value);
             }
 
             await this.ChromaInterface.Mousepad.SetCustomAsync(mousepadGrid);

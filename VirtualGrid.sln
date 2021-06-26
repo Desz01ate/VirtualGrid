@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31112.23
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31410.414
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualGrid", "VirtualGrid\VirtualGrid.csproj", "{DA9BCD02-C8DF-485D-A0EC-651F266940E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtualGrid", "VirtualGrid\VirtualGrid.csproj", "{DA9BCD02-C8DF-485D-A0EC-651F266940E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualGrid.Razer", "VirtualGrid.Razer\VirtualGrid.Razer.csproj", "{B9208DCB-BA85-4F1F-9C55-C09455835CFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtualGrid.Razer", "VirtualGrid.Razer\VirtualGrid.Razer.csproj", "{B9208DCB-BA85-4F1F-9C55-C09455835CFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualGrid.Asus", "VirtualGrid.Asus\VirtualGrid.Asus.csproj", "{E27119D6-C2B6-4F77-BFB5-85C6B2B45EDE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtualGrid.Asus", "VirtualGrid.Asus\VirtualGrid.Asus.csproj", "{E27119D6-C2B6-4F77-BFB5-85C6B2B45EDE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

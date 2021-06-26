@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>VirtualGrid.Asus</name>
+    </assembly>
+    <members>
+        <member name="T:VirtualGrid.Asus.AsusRogStrix_G15_2021_Adapter">
+            <summary>
+            An adapter to convert <see cref="T:VirtualGrid.Interfaces.IVirtualLedGrid"/> into Asus Rog Strix G15 (2021) compatible effect.
+            </summary>
+        </member>
+    </members>
+</doc>

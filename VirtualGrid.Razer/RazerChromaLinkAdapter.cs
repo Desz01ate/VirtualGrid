@@ -29,7 +29,7 @@ namespace VirtualGrid.Razer
             var keyIdx = 0;
             foreach (var key in virtualGrid)
             {
-                chromaLinkGrid[keyIdx++] = ToColoreColor(key.Color);
+                chromaLinkGrid[keyIdx++] = ToColoreColor(key.Color.Value);
             }
 
             await this.ChromaInterface.ChromaLink.SetCustomAsync(chromaLinkGrid);

@@ -10,27 +10,49 @@ using VirtualGrid.Interfaces;
 namespace VirtualGrid
 {
     /// <summary>
-    /// A mediator to arrange task between virtual grid and physical devices.
+    /// A mediator to arrange task between virtual grids and physical devices.
     /// </summary>
     public sealed class PhysicalDeviceMediator : IDeviceArrangeMediator
     {
         private readonly IDictionary<IPhysicalDeviceAdapter, (int X, int Y)> _adapters;
-        private readonly IVirtualLedGrid _grid;
+        private readonly ICollection<IVirtualLedGrid> _grids;
 
         private bool _disposed;
 
+        /// <summary>
+        /// Constructor for physical device mediator with single virtual LED grid.
+        /// </summary>
+        /// <param name="grid"></param>
         public PhysicalDeviceMediator(IVirtualLedGrid grid)
         {
-            this._grid = grid ?? throw new ArgumentNullException(nameof(grid));
+            if (grid == null)
+                throw new ArgumentNullException(nameof(grid));
+
+            this._grids = new IVirtualLedGrid[1] { grid };
             this._adapters = new Dictionary<IPhysicalDeviceAdapter, (int X, int Y)>();
         }
 
+        /// <summary>
+        /// Constructor for physical device mediator with multiple virtual LED grids.
+        /// </summary>
+        /// <param name="grids"></param>
+        public PhysicalDeviceMediator(params IVirtualLedGrid[] grids)
+        {
+            if (grids == null || !grids.Any())
+                throw new ArgumentNullException(nameof(grids));
+
+            this._grids = grids;
+            this._adapters = new Dictionary<IPhysicalDeviceAdapter, (int X, int Y)>();
+        }
+
+        /// <inheritdoc/>
         public void Attach<T>(int x, int y) where T : IPhysicalDeviceAdapter, new()
         {
             T adapter = new();
             Attach(x, y, adapter);
         }
 
+        /// <inheritdoc/>
         public void Attach(int x, int y, IPhysicalDeviceAdapter adapter)
         {
             if (x < 0 || y < 0)
@@ -43,6 +65,7 @@ namespace VirtualGrid
             this._adapters.Add(adapter, (x, y));
         }
 
+        /// <inheritdoc/>
         public bool UpdateAdapterPosition<T>(int x, int y) where T : IPhysicalDeviceAdapter
         {
             if (x < 0 || y < 0)
@@ -58,6 +81,7 @@ namespace VirtualGrid
             return true;
         }
 
+        /// <inheritdoc/>
         public IPhysicalDeviceAdapter? Detach<T>() where T : IPhysicalDeviceAdapter
         {
             var adapter = this._adapters.SingleOrDefault(x => x.GetType() == typeof(T)).Key;
@@ -70,9 +94,12 @@ namespace VirtualGrid
             return adapter;
         }
 
+        /// <inheritdoc/>
         public Task ApplyAsync(CancellationToken cancellationToken = default)
         {
-            if (!_grid.Any())
+            var grid = this._grids.Aggregate((x, y) => x + y);
+
+            if (!grid.Any())
                 return Task.CompletedTask;
 
             var tasks = new Task[_adapters.Count];
@@ -81,14 +108,9 @@ namespace VirtualGrid
                 var adapterPair = _adapters.ElementAt(idx);
                 var adapter = adapterPair.Key;
                 var (X, Y) = adapterPair.Value;
-                var slicedGrid = _grid.Slice(X, Y, adapter.ColumnCount, adapter.RowCount);
-                if (slicedGrid == null)
-                {
-                    tasks[idx] = Task.CompletedTask;
-                    continue;
-                }
+                var slicedGrid = grid.Slice(X, Y, adapter.ColumnCount, adapter.RowCount);
 
-                var task = adapter.ApplyAsync(slicedGrid, cancellationToken);
+                var task = slicedGrid == null ? Task.CompletedTask : adapter.ApplyAsync(slicedGrid, cancellationToken);
                 tasks[idx] = task;
             }
             return Task.WhenAll(tasks);
@@ -110,6 +132,7 @@ namespace VirtualGrid
             this._disposed = true;
         }
 
+        /// <inheritdoc/>
         public void Dispose()
         {
             this.Dispose(true);
