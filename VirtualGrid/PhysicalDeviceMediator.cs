@@ -61,6 +61,9 @@ namespace VirtualGrid
                 throw new ArgumentNullException(nameof(_adapters));
             if (!adapter.Initialized)
                 return;
+            var adapterType = adapter.GetType();
+            if (this._adapters.Any(x => x.Key.GetType() == adapterType))
+                throw new InvalidOperationException("Unable to attach the same adapter type to the mediator.");
 
             this._adapters.Add(adapter, (x, y));
         }
@@ -71,7 +74,7 @@ namespace VirtualGrid
             if (x < 0 || y < 0)
                 throw new ArgumentOutOfRangeException($"Attach range must be at positive index.");
 
-            var adapter = this._adapters.SingleOrDefault(x => x.Key.GetType() == typeof(T));
+            var adapter = this._adapters.SingleOrDefault(x => x.GetType() == typeof(T));
             if (adapter.Key == null)
             {
                 return false;
@@ -84,7 +87,7 @@ namespace VirtualGrid
         /// <inheritdoc/>
         public IPhysicalDeviceAdapter? Detach<T>() where T : IPhysicalDeviceAdapter
         {
-            var adapter = this._adapters.SingleOrDefault(x => x.Key.GetType() == typeof(T)).Key;
+            var adapter = this._adapters.SingleOrDefault(x => x.GetType() == typeof(T)).Key;
             if (adapter == null)
             {
                 return null;
