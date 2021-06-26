@@ -10,33 +10,25 @@ using VirtualGrid.Interfaces;
 namespace VirtualGrid
 {
     /// <summary>
-    /// A mediator to arrange task between virtual grid and physical devices.
+    /// A mediator to arrange task between virtual grids and physical devices.
     /// </summary>
     public sealed class PhysicalDeviceMediator : IDeviceArrangeMediator
     {
         private readonly IDictionary<IPhysicalDeviceAdapter, (int X, int Y)> _adapters;
-        private readonly ICollection<BaseVirtualLedGrid> _grids;
+        private readonly ICollection<IVirtualLedGrid> _grids;
 
         private bool _disposed;
 
-        public PhysicalDeviceMediator(IVirtualLedGrid grid) : this(grid as BaseVirtualLedGrid)
-        {
-        }
-
-        public PhysicalDeviceMediator(params IVirtualLedGrid[] grids) : this(grids as BaseVirtualLedGrid[])
-        {
-        }
-
-        public PhysicalDeviceMediator(BaseVirtualLedGrid grid)
+        public PhysicalDeviceMediator(IVirtualLedGrid grid)
         {
             if (grid == null)
                 throw new ArgumentNullException(nameof(grid));
 
-            this._grids = new BaseVirtualLedGrid[1] { grid };
+            this._grids = new IVirtualLedGrid[1] { grid };
             this._adapters = new Dictionary<IPhysicalDeviceAdapter, (int X, int Y)>();
         }
 
-        public PhysicalDeviceMediator(params BaseVirtualLedGrid[] grids)
+        public PhysicalDeviceMediator(params IVirtualLedGrid[] grids)
         {
             if (grids == null || !grids.Any())
                 throw new ArgumentNullException(nameof(grids));
@@ -104,13 +96,8 @@ namespace VirtualGrid
                 var adapter = adapterPair.Key;
                 var (X, Y) = adapterPair.Value;
                 var slicedGrid = grid.Slice(X, Y, adapter.ColumnCount, adapter.RowCount);
-                if (slicedGrid == null)
-                {
-                    tasks[idx] = Task.CompletedTask;
-                    continue;
-                }
 
-                var task = adapter.ApplyAsync(slicedGrid, cancellationToken);
+                var task = slicedGrid == null ? Task.CompletedTask : adapter.ApplyAsync(slicedGrid, cancellationToken);
                 tasks[idx] = task;
             }
             return Task.WhenAll(tasks);
