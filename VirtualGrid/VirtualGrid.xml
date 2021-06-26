@@ -1,0 +1,255 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>VirtualGrid</name>
+    </assembly>
+    <members>
+        <member name="T:VirtualGrid.Color">
+            <summary>
+            An abstract color object representation.
+            </summary>
+        </member>
+        <member name="P:VirtualGrid.Color.B">
+            <summary>
+            Gets the blue component of the color as a byte.
+            </summary>
+        </member>
+        <member name="P:VirtualGrid.Color.G">
+            <summary>
+            Gets the green component of the color as a byte.
+            </summary>
+        </member>
+        <member name="P:VirtualGrid.Color.R">
+            <summary>
+            Gets the red component of the color as a byte.
+            </summary>
+        </member>
+        <member name="F:VirtualGrid.Color.Value">
+            <summary>
+            Gets the unsigned integer representing
+            the color. On the form <c>0xKKBBGGRR</c>.
+            </summary>
+        </member>
+        <member name="F:VirtualGrid.Color.Black">
+            <summary>
+            Black color.
+            </summary>
+        </member>
+        <member name="F:VirtualGrid.Color.Blue">
+            <summary>
+            (Dark) blue color.
+            </summary>
+        </member>
+        <member name="F:VirtualGrid.Color.Green">
+            <summary>
+            (Neon/bright) green color.
+            </summary>
+        </member>
+        <member name="F:VirtualGrid.Color.HotPink">
+            <summary>
+            Hot pink color.
+            </summary>
+        </member>
+        <member name="F:VirtualGrid.Color.Orange">
+            <summary>
+            Orange color.
+            </summary>
+        </member>
+        <member name="F:VirtualGrid.Color.Pink">
+            <summary>
+            Pink color.
+            </summary>
+        </member>
+        <member name="F:VirtualGrid.Color.Purple">
+            <summary>
+            Purple color.
+            </summary>
+        </member>
+        <member name="F:VirtualGrid.Color.Red">
+            <summary>
+            Red color.
+            </summary>
+        </member>
+        <member name="F:VirtualGrid.Color.White">
+            <summary>
+            White color.
+            </summary>
+        </member>
+        <member name="F:VirtualGrid.Color.Yellow">
+            <summary>
+            Yellow color.
+            </summary>
+        </member>
+        <member name="T:VirtualGrid.Interfaces.IDeviceArrangeMediator">
+            <summary>
+            A mediator to arrange task between virtual grid and physical devices.
+            </summary>
+        </member>
+        <member name="M:VirtualGrid.Interfaces.IDeviceArrangeMediator.Attach``1(System.Int32,System.Int32)">
+            <summary>
+            Attach physical device adapter to mediator.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="x">X-axis index to bind adapter to virtual grid.</param>
+            <param name="y">Y-axis index to bind adapter to virtual grid.</param>
+        </member>
+        <member name="M:VirtualGrid.Interfaces.IDeviceArrangeMediator.Attach(System.Int32,System.Int32,VirtualGrid.Interfaces.IPhysicalDeviceAdapter)">
+            <summary>
+            Attach physical device adapter to mediator.
+            </summary>
+            <param name="x">X-axis index to bind adapter to virtual grid.</param>
+            <param name="y">Y-axis index to bind adapter to virtual grid.</param>
+            <param name="adapter">An instance of IPhysicalDeviceAdapter.</param>
+        </member>
+        <member name="M:VirtualGrid.Interfaces.IDeviceArrangeMediator.UpdateAdapterPosition``1(System.Int32,System.Int32)">
+            <summary>
+            Move adapter to different position.
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VirtualGrid.Interfaces.IDeviceArrangeMediator.Detach``1">
+            <summary>
+            Detach physical device adapter from the mediator, the adapter will no longer control by mediator and must be manually manage by caller.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns>Instance of IPhysicalDeviceAdapter if type is registered in mediator, otherwise null.</returns>
+        </member>
+        <member name="M:VirtualGrid.Interfaces.IDeviceArrangeMediator.ApplyAsync(System.Threading.CancellationToken)">
+            <summary>
+            Apply rendered grid to physical devices.
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="T:VirtualGrid.Interfaces.IPhysicalDeviceAdapter">
+            <summary>
+            An interface to represent physical device tied to the <see cref="T:VirtualGrid.Interfaces.IVirtualLedGrid"/>
+            </summary>
+        </member>
+        <member name="P:VirtualGrid.Interfaces.IPhysicalDeviceAdapter.Name">
+            <summary>
+            Adapter name.
+            </summary>
+        </member>
+        <member name="P:VirtualGrid.Interfaces.IPhysicalDeviceAdapter.Initialized">
+            <summary>
+            Determine whether the adapter is initialize successfully. 
+            </summary>
+        </member>
+        <member name="P:VirtualGrid.Interfaces.IPhysicalDeviceAdapter.RowCount">
+            <summary>
+            Indicate total row count.
+            </summary>
+        </member>
+        <member name="P:VirtualGrid.Interfaces.IPhysicalDeviceAdapter.ColumnCount">
+            <summary>
+            Indicate total column count.
+            </summary>
+        </member>
+        <member name="M:VirtualGrid.Interfaces.IPhysicalDeviceAdapter.ApplyAsync(VirtualGrid.Interfaces.IVirtualLedGrid,System.Threading.CancellationToken)">
+            <summary>
+            Apply the effects from <see cref="T:VirtualGrid.Interfaces.IVirtualLedGrid"/> to physical devices.
+            </summary>
+            <param name="virtualGrid">Instance of <see cref="T:VirtualGrid.Interfaces.IVirtualLedGrid"/></param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns></returns>
+        </member>
+        <member name="T:VirtualGrid.Interfaces.IVirtualKey">
+            <summary>
+            Virtual key that represent a physical key in virtual grid.
+            </summary>
+        </member>
+        <member name="P:VirtualGrid.Interfaces.IVirtualKey.Index">
+            <summary>
+            Index of key in virtual grid.
+            </summary>
+        </member>
+        <member name="P:VirtualGrid.Interfaces.IVirtualKey.Color">
+            <summary>
+            Color of key.
+            </summary>
+        </member>
+        <member name="T:VirtualGrid.Interfaces.IVirtualLedGrid">
+            <summary>
+            A virtual LED grid that represent the physical setup.
+            </summary>
+        </member>
+        <member name="P:VirtualGrid.Interfaces.IVirtualLedGrid.Item(System.Int32,System.Int32)">
+            <summary>
+            Indexer for accesing color of the virtual grid using specific index.
+            </summary>
+            <param name="column">Specific column.</param>
+            <param name="row">Specific row.</param>
+            <returns><seealso cref="T:VirtualGrid.Color"/></returns>
+        </member>
+        <member name="P:VirtualGrid.Interfaces.IVirtualLedGrid.RowCount">
+            <summary>
+            Row count for virtual grid.
+            </summary>
+        </member>
+        <member name="P:VirtualGrid.Interfaces.IVirtualLedGrid.ColumnCount">
+            <summary>
+            Column count for virtual grid.
+            </summary>
+        </member>
+        <member name="M:VirtualGrid.Interfaces.IVirtualLedGrid.Set(VirtualGrid.Color)">
+            <summary>
+            Set a single color to all keys.
+            </summary>
+            <param name="color"></param>
+        </member>
+        <member name="M:VirtualGrid.Interfaces.IVirtualLedGrid.Set(VirtualGrid.Color[][])">
+            <summary>
+            Set per-key color.
+            </summary>
+            <param name="colors"></param>
+        </member>
+        <member name="M:VirtualGrid.Interfaces.IVirtualLedGrid.Slice(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Take a slice grid within given criteria.
+            </summary>
+            <param name="column">Start column index.</param>
+            <param name="row">Start row index.</param>
+            <param name="columnCount">Total column to slice.</param>
+            <param name="rowCount">Total row to slice.</param>
+            <returns>A sliced virtual LED grid if criteria is in proper range, otherwise null.</returns>
+        </member>
+        <member name="T:VirtualGrid.PhysicalDeviceMediator">
+            <summary>
+            A mediator to arrange task between virtual grid and physical devices.
+            </summary>
+        </member>
+        <member name="T:VirtualGrid.VirtualLedGrid">
+            <summary>
+            A virtual LED grid that represent the physical setup.
+            </summary>
+        </member>
+        <member name="P:VirtualGrid.VirtualLedGrid.Item(System.Int32,System.Int32)">
+            <summary>
+            Indexer for accesing color of the virtual grid using specific index.
+            </summary>
+            <param name="column">Specific column.</param>
+            <param name="row">Specific row.</param>
+            <returns><seealso cref="T:VirtualGrid.Color"/></returns>
+        </member>
+        <member name="M:VirtualGrid.VirtualLedGrid.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:VirtualGrid.VirtualLedGrid.Set(VirtualGrid.Color)">
+            <summary>
+            Set a single color to all keys.
+            </summary>
+            <param name="color"></param>
+        </member>
+        <member name="M:VirtualGrid.VirtualLedGrid.Set(VirtualGrid.Color[][])">
+            <summary>
+            Set per-key color.
+            </summary>
+            <param name="colors"></param>
+        </member>
+    </members>
+</doc>

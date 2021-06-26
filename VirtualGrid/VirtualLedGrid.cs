@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using VirtualGrid.Interfaces;
 
 namespace VirtualGrid
@@ -126,33 +127,14 @@ namespace VirtualGrid
 
         public IVirtualLedGrid? Slice(int column, int row, int columnCount, int rowCount)
         {
-            var requestedColumn = column + columnCount;
-            var requestedRow = row + rowCount;
-            if (requestedColumn > this._totalColumnCount)
-            {
-                requestedColumn = this._totalColumnCount - 1 - column;
-            }
-
-            if (requestedRow > this._totalRowCount)
-            {
-                requestedRow = this._totalRowCount - 1 - row;
-            }
-
-            //even after adjustment, still exceed grid dimension.
-            if (requestedColumn < 0 || this._totalColumnCount < requestedColumn ||
-                requestedRow < 0 || this._totalRowCount < requestedRow)
-            {
-                return null;
-            }
-
             var grid = new IVirtualKey[rowCount][];
-            var subRow = this._grid[row..requestedRow];
+            var subRow = this._grid.Skip(row).Take(rowCount).ToArray();
             for (var rowIdx = 0; rowIdx < subRow.Length; rowIdx++)
             {
-                var currentRow = subRow[rowIdx][column..requestedColumn];
+                var currentRow = subRow[rowIdx].Skip(column).Take(columnCount).ToArray();
                 grid[rowIdx] = currentRow;
             }
-            return new VirtualLedGrid(grid, requestedColumn - column, requestedRow - row);
+            return new VirtualLedGrid(grid, grid.First().Length, subRow.Length);
         }
     }
 }
