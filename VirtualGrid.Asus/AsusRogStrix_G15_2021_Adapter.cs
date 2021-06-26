@@ -39,19 +39,25 @@ namespace VirtualGrid.Asus
             }
         }
 
-        private readonly IAuraSdk2 _sdk;
-        private readonly IAuraSyncDevice _notebookKeyboard;
-        private readonly Representator _representor;
-        //<inheritdoc/>
+        private readonly IAuraSdk2? _sdk;
+        private readonly IAuraSyncDevice? _notebookKeyboard;
+        private readonly Representator? _representor;
+
+        /// <inheritdoc/>
         public string Name => "Asus Rog Strix Laptop";
 
-        //<inheritdoc/>
+        /// <inheritdoc/>
         public bool Initialized { get; }
 
+        /// <inheritdoc/>
         public int RowCount => 9;
 
+        /// <inheritdoc/>
         public int ColumnCount => 21;
 
+        /// <summary>
+        /// Constructor for ASUS Rog Strix G15 (2021) laptop adapter.
+        /// </summary>
         public AsusRogStrix_G15_2021_Adapter()
         {
             try
@@ -70,9 +76,10 @@ namespace VirtualGrid.Asus
             }
         }
 
-        // <inheritdoc/>
+        /// <inheritdoc/>
         public Task ApplyAsync(IVirtualLedGrid virtualGrid, CancellationToken cancellationToken = default)
         {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             if (!this.Initialized)
                 return Task.CompletedTask;
 
@@ -86,15 +93,20 @@ namespace VirtualGrid.Asus
                     {
                         continue;
                     }
-                    var key = virtualGrid[col, row];
-                    var color = ToUint(key.Value);
+                    var cellColor = virtualGrid[col, row];
+                    if (cellColor == null)
+                        continue;
+
+                    var color = ToUint(cellColor.Value);
                     _notebookKeyboard.Lights[(int)asusKey].Color = color;
                 }
             }
             _notebookKeyboard.Apply();
             return Task.CompletedTask;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
         }
 
+        /// <inheritdoc/>
         public void Dispose()
         {
             this._sdk?.ReleaseControl(0);

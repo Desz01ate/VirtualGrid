@@ -23,7 +23,7 @@ namespace VirtualGrid
                 this.Color = color;
             }
 
-            public string ToString()
+            public override string ToString()
             {
                 return $"({Index.X},{Index.Y}): {Color?.ToString() ?? "Transparent"}";
             }
@@ -33,8 +33,10 @@ namespace VirtualGrid
         private readonly int _totalColumnCount;
         private readonly IVirtualKey[][] _grid;
 
+        /// <inheritdoc/>
         public int RowCount => _totalRowCount;
 
+        /// <inheritdoc/>
         public int ColumnCount => _totalColumnCount;
 
         /// <summary>
@@ -113,6 +115,7 @@ namespace VirtualGrid
             }
         }
 
+        /// <inheritdoc/>
         public void Clear()
         {
             foreach (var key in this)
@@ -121,6 +124,7 @@ namespace VirtualGrid
             }
         }
 
+        /// <inheritdoc/>
         public IVirtualLedGrid? Slice(int column, int row, int columnCount, int rowCount)
         {
             var grid = new IVirtualKey[rowCount][];
@@ -133,6 +137,7 @@ namespace VirtualGrid
             return new VirtualLedGrid(grid, grid.First().Length, subRow.Length);
         }
 
+        /// <inheritdoc/>
         public IEnumerator<IVirtualKey> GetEnumerator()
         {
             foreach (var row in this._grid)
@@ -145,9 +150,12 @@ namespace VirtualGrid
             return this.GetEnumerator();
         }
 
-        public static VirtualLedGrid operator +(VirtualLedGrid grid, VirtualLedGrid anotherGrid)
+        /// <inheritdoc/>
+        public static VirtualLedGrid operator +(VirtualLedGrid? grid, VirtualLedGrid? anotherGrid)
         {
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             var resultGrid = (IVirtualLedGrid)grid + (IVirtualLedGrid)anotherGrid;
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             return (VirtualLedGrid)resultGrid;
         }
     }

@@ -19,6 +19,10 @@ namespace VirtualGrid
 
         private bool _disposed;
 
+        /// <summary>
+        /// Constructor for physical device mediator with single virtual LED grid.
+        /// </summary>
+        /// <param name="grid"></param>
         public PhysicalDeviceMediator(IVirtualLedGrid grid)
         {
             if (grid == null)
@@ -28,6 +32,10 @@ namespace VirtualGrid
             this._adapters = new Dictionary<IPhysicalDeviceAdapter, (int X, int Y)>();
         }
 
+        /// <summary>
+        /// Constructor for physical device mediator with multiple virtual LED grids.
+        /// </summary>
+        /// <param name="grids"></param>
         public PhysicalDeviceMediator(params IVirtualLedGrid[] grids)
         {
             if (grids == null || !grids.Any())
@@ -37,12 +45,14 @@ namespace VirtualGrid
             this._adapters = new Dictionary<IPhysicalDeviceAdapter, (int X, int Y)>();
         }
 
+        /// <inheritdoc/>
         public void Attach<T>(int x, int y) where T : IPhysicalDeviceAdapter, new()
         {
             T adapter = new();
             Attach(x, y, adapter);
         }
 
+        /// <inheritdoc/>
         public void Attach(int x, int y, IPhysicalDeviceAdapter adapter)
         {
             if (x < 0 || y < 0)
@@ -55,6 +65,7 @@ namespace VirtualGrid
             this._adapters.Add(adapter, (x, y));
         }
 
+        /// <inheritdoc/>
         public bool UpdateAdapterPosition<T>(int x, int y) where T : IPhysicalDeviceAdapter
         {
             if (x < 0 || y < 0)
@@ -70,6 +81,7 @@ namespace VirtualGrid
             return true;
         }
 
+        /// <inheritdoc/>
         public IPhysicalDeviceAdapter? Detach<T>() where T : IPhysicalDeviceAdapter
         {
             var adapter = this._adapters.SingleOrDefault(x => x.GetType() == typeof(T)).Key;
@@ -82,6 +94,7 @@ namespace VirtualGrid
             return adapter;
         }
 
+        /// <inheritdoc/>
         public Task ApplyAsync(CancellationToken cancellationToken = default)
         {
             var grid = this._grids.Aggregate((x, y) => x + y);
@@ -119,6 +132,7 @@ namespace VirtualGrid
             this._disposed = true;
         }
 
+        /// <inheritdoc/>
         public void Dispose()
         {
             this.Dispose(true);

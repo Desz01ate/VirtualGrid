@@ -55,7 +55,8 @@ namespace VirtualGrid.Interfaces
         /// <returns>A sliced virtual LED grid if criteria is in proper range, otherwise null.</returns>
         IVirtualLedGrid? Slice(int column, int row, int columnCount, int rowCount);
 
-        public static IVirtualLedGrid operator +(IVirtualLedGrid grid, IVirtualLedGrid anotherGrid)
+        /// <inheritdoc/>
+        public static IVirtualLedGrid operator +(IVirtualLedGrid? grid, IVirtualLedGrid? anotherGrid)
         {
             if (grid == null && anotherGrid == null)
             {
@@ -73,7 +74,9 @@ namespace VirtualGrid.Interfaces
                     bottom.Color = top.Color;
                 }
             }
+#pragma warning disable CS8603 // Possible null reference return.
             return grid;
+#pragma warning restore CS8603 // Possible null reference return.
         }
     }
 }
