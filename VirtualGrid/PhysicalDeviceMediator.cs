@@ -71,7 +71,7 @@ namespace VirtualGrid
             if (x < 0 || y < 0)
                 throw new ArgumentOutOfRangeException($"Attach range must be at positive index.");
 
-            var adapter = this._adapters.SingleOrDefault(x => x.GetType() == typeof(T));
+            var adapter = this._adapters.SingleOrDefault(x => x.Key.GetType() == typeof(T));
             if (adapter.Key == null)
             {
                 return false;
@@ -84,7 +84,7 @@ namespace VirtualGrid
         /// <inheritdoc/>
         public IPhysicalDeviceAdapter? Detach<T>() where T : IPhysicalDeviceAdapter
         {
-            var adapter = this._adapters.SingleOrDefault(x => x.GetType() == typeof(T)).Key;
+            var adapter = this._adapters.SingleOrDefault(x => x.Key.GetType() == typeof(T)).Key;
             if (adapter == null)
             {
                 return null;
