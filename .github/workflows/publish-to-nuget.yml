@@ -25,13 +25,16 @@ jobs:
       with:
           PROJECT_FILE_PATH: VirtualGrid/VirtualGrid.csproj
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+      continue-on-error: true
     - name: Publish VirtualGrid.Razer
       uses: brandedoutcast/publish-nuget@v2.5.2
       with:
           PROJECT_FILE_PATH: VirtualGrid.Razer/VirtualGrid.Razer.csproj
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+      continue-on-error: true
     - name: Publish VirtualGrid.Asus
       uses: brandedoutcast/publish-nuget@v2.5.2
       with:
           PROJECT_FILE_PATH: VirtualGrid.Asus/VirtualGrid.Asus.csproj
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+      continue-on-error: true
