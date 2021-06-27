@@ -16,6 +16,8 @@ jobs:
         dotnet-version: 5.0.x
     - name: Install dependencies
       run: dotnet restore
+    - name: Run unit tests
+      run: dotnet test
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Publish VirtualGrid

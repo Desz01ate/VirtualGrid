@@ -63,6 +63,11 @@ namespace VirtualGrid
         /// </summary>
         public VirtualLedGrid(int column, int row)
         {
+            if (column < 0)
+                throw new ArgumentOutOfRangeException(nameof(column));
+            if (row < 0)
+                throw new ArgumentOutOfRangeException(nameof(row));
+
             var grid = new VirtualKey[row][];
             for (var rowCount = 0; rowCount < row; rowCount++)
             {

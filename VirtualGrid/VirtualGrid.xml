@@ -125,6 +125,16 @@
             A mediator to arrange task between virtual grid and physical devices.
             </summary>
         </member>
+        <member name="P:VirtualGrid.Interfaces.IDeviceArrangeMediator.AttachedLedGrids">
+            <summary>
+            Gets attached LED grid.
+            </summary>
+        </member>
+        <member name="P:VirtualGrid.Interfaces.IDeviceArrangeMediator.AttachedAdapters">
+            <summary>
+            Gets attached adapters.
+            </summary>
+        </member>
         <member name="M:VirtualGrid.Interfaces.IDeviceArrangeMediator.Attach``1(System.Int32,System.Int32)">
             <summary>
             Attach physical device adapter to mediator.
@@ -268,6 +278,12 @@
             <summary>
             A mediator to arrange task between virtual grids and physical devices.
             </summary>
+        </member>
+        <member name="P:VirtualGrid.PhysicalDeviceMediator.AttachedLedGrids">
+            <inheritdoc/>
+        </member>
+        <member name="P:VirtualGrid.PhysicalDeviceMediator.AttachedAdapters">
+            <inheritdoc/>
         </member>
         <member name="M:VirtualGrid.PhysicalDeviceMediator.#ctor(VirtualGrid.Interfaces.IVirtualLedGrid)">
             <summary>

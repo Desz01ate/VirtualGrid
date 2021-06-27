@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,6 +11,16 @@ namespace VirtualGrid.Interfaces
     /// </summary>
     public interface IDeviceArrangeMediator : IDisposable
     {
+        /// <summary>
+        /// Gets attached LED grid.
+        /// </summary>
+        IEnumerable<IVirtualLedGrid> AttachedLedGrids { get; }
+
+        /// <summary>
+        /// Gets attached adapters.
+        /// </summary>
+        IEnumerable<IPhysicalDeviceAdapter> AttachedAdapters { get; }
+
         /// <summary>
         /// Attach physical device adapter to mediator.
         /// </summary>
