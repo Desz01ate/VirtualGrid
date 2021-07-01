@@ -1,6 +1,9 @@
-﻿using System;
+﻿using NvAPIWrapper.GPU;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Management;
 using System.Threading.Tasks;
 using VirtualGrid;
@@ -24,6 +27,8 @@ namespace SystemMonitor
             var cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
             var memoryCounter = new PerformanceCounter("Memory", "Available MBytes");
             var totalMemoryMBytes = GC.GetGCMemoryInfo().TotalAvailableMemoryBytes / 1024 / 1024;
+            var gpu = PhysicalGPU.GetPhysicalGPUs().FirstOrDefault();
+
 
             var grid = new VirtualLedGrid(30, 9);
             grid.Set(new Color(6, 6, 6));
@@ -37,6 +42,8 @@ namespace SystemMonitor
             var cpuGrid = grid.Slice(2, 2, 12, 1);
             var memoryGrid = grid.Slice(2, 3, 12, 1);
             var diskGrid = grid.Slice(2, 4, 11, 1);
+            var gpuGrid = grid.Slice(2, 5, 11, 1);
+
 
             var cpuColor = new Color(17, 125, 187);
             var memoryColor = new Color(139, 18, 174);
@@ -51,13 +58,16 @@ namespace SystemMonitor
                 cpuGrid.Set(cpuIdleColor);
                 memoryGrid.Set(memoryAvailableColor);
                 diskGrid.Set(diskAvailableColor);
+                gpuGrid.Set(cpuIdleColor);
 
                 var cpuUtilize = cpuCounter.NextValue() / 100f;
                 var currentMemoryUsage = memoryCounter.NextValue();
                 var memoryUtilize = 1.0f - (currentMemoryUsage / totalMemoryMBytes);
+                var gpuUtilize = (gpu?.UsageInformation.GPU.Percentage ?? 0) / 100f;
 
                 var cpuGridLength = (int)(cpuGrid.ColumnCount * cpuUtilize);
                 var memoryGridLength = (int)(memoryGrid.ColumnCount * memoryUtilize);
+                var gpuGridLegth = (int)(gpuGrid.ColumnCount * gpuUtilize);
 
                 var diskInfo = new DriveInfo("C");
                 var freeSpacePercent = (double)(diskInfo.TotalSize - diskInfo.TotalFreeSpace) / diskInfo.TotalSize;
@@ -76,6 +86,10 @@ namespace SystemMonitor
                 for (var diskCol = 0; diskCol < diskGridLength; diskCol++)
                 {
                     diskGrid[diskCol, 0] = diskColor;
+                }
+                for (var gpuCol = 0; gpuCol < gpuGridLegth; gpuCol++)
+                {
+                    gpuGrid[gpuCol, 0] = cpuColor;
                 }
 
                 await mediator.ApplyAsync();
