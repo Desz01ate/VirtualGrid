@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace VirtualGrid
+﻿namespace VirtualGrid
 {
     public partial struct Color
     {
@@ -55,5 +51,4 @@ namespace VirtualGrid
         /// </summary>
         public static readonly Color Yellow = new Color(255, 255, 0);
     }
-
 }

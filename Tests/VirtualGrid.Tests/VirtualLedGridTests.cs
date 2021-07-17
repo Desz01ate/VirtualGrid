@@ -120,5 +120,61 @@ namespace VirtualGrid.Tests
             Assert.Equal(expectedColumnCount, actualColumnCount);
             Assert.Equal(expectedRowCount, actualRowCount);
         }
+
+        [Fact]
+        public void PlusOperator_Operate_BetweenObjects_ShouldSuccess()
+        {
+            var instance = new VirtualLedGrid(1, 1);
+            var instance2 = new VirtualLedGrid(1, 1);
+
+            var actual = instance + instance2;
+
+            Assert.NotNull(actual);
+        }
+
+        [Fact]
+        public void PlusOperator_Operate_OnValidAndNullObject_ShouldThrowInvalidOperationException()
+        {
+            VirtualLedGrid instance = new VirtualLedGrid(1, 1);
+            VirtualLedGrid instance2 = null;
+
+            Assert.Throws<InvalidOperationException>(() => instance + instance2);
+        }
+
+        [Fact]
+        public void PlusOperator_Operate_OnNullObjects_ShouldThrowInvalidOperationException()
+        {
+            VirtualLedGrid instance = null;
+            VirtualLedGrid instance2 = null;
+
+            Assert.Throws<InvalidOperationException>(() => instance + instance2);
+        }
+
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(1, 0)]
+        [InlineData(0, 1)]
+        [InlineData(1, 1)]
+        public void Indexer_WithProperIndex_ShouldReturnColor(int x, int y)
+        {
+            VirtualLedGrid instance = new VirtualLedGrid(2, 2);
+            instance.Set(Color.Red);
+
+            var expected = Color.Red;
+            var actual = instance[x, y];
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(-1, 0)]
+        [InlineData(0, -1)]
+        public void Indexer_WithInvalidIndex_ShouldThrowIndexOutOfRange(int x, int y)
+        {
+            VirtualLedGrid instance = new VirtualLedGrid(2, 2);
+            instance.Set(Color.Red);
+
+            Assert.Throws<IndexOutOfRangeException>(() => instance[x, y]);
+        }
     }
 }

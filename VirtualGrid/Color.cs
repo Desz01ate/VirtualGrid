@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace VirtualGrid
@@ -7,6 +8,7 @@ namespace VirtualGrid
     /// <summary>
     /// An abstract color object representation.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public partial struct Color
     {
         /// <summary>
