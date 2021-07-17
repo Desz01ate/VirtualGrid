@@ -1,5 +1,6 @@
 # VirtualGrid
 [![nuget](https://img.shields.io/nuget/v/VirtualGrid.svg)](https://www.nuget.org/packages/VirtualGrid/)
+[![Coverage Status](https://coveralls.io/repos/github/Desz01ate/VirtualGrid/badge.svg?branch=master)](https://coveralls.io/github/Desz01ate/VirtualGrid?branch=master)
 
 A library to simplify RGB tasks when working with multiple devices and vendors by create single lightweight abstract LED array
 and convert into device or vendor specific implementation via adapter at later state.
