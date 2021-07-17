@@ -58,7 +58,7 @@ namespace VirtualGrid.Interfaces
         /// <inheritdoc/>
         public static IVirtualLedGrid operator +(IVirtualLedGrid? grid, IVirtualLedGrid? anotherGrid)
         {
-            if (grid == null && anotherGrid == null)
+            if (grid == null || anotherGrid == null)
             {
                 throw new InvalidOperationException();
             }
