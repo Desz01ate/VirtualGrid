@@ -16,10 +16,15 @@ jobs:
         dotnet-version: 5.0.x
     - name: Install dependencies
       run: dotnet restore
-    - name: Run unit tests
-      run: dotnet test
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build --configuration Release --no-restore /p:ContinuousIntegrationBuild=true
+    - name: Run unit tests
+      run: dotnet test --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=lcov
+    - name: Publish coverage report to coveralls.io   
+      uses: coverallsapp/github-action@master   
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }} 
+        path-to-lcov: Tests/VirtualGrid.Tests/coverage.info 
     - name: Publish VirtualGrid
       uses: brandedoutcast/publish-nuget@v2.5.2
       with:
