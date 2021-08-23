@@ -1,9 +1,6 @@
-﻿using Colore;
-using Colore.Effects.Mousepad;
+﻿using Colore.Effects.Mousepad;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using VirtualGrid.Interfaces;
