@@ -6,6 +6,7 @@ namespace VirtualGrid.Razer
     {
         private static IChroma? _chromaConnector;
         private static readonly object _lock = new();
+
         public static IChroma ChromaConnector
         {
             get

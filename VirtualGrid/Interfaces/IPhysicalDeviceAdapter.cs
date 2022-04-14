@@ -15,7 +15,7 @@ namespace VirtualGrid.Interfaces
         string Name { get; }
 
         /// <summary>
-        /// Determine whether the adapter is initialize successfully. 
+        /// Determine whether the adapter is initialized successfully. 
         /// </summary>
         bool Initialized { get; }
 

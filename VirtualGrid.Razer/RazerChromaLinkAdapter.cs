@@ -16,20 +16,22 @@ namespace VirtualGrid.Razer
 
         public override int ColumnCount => 5;
 
-        public override async Task ApplyAsync(IVirtualLedGrid virtualGrid, CancellationToken cancellationToken = default)
+        public override Task ApplyAsync(IVirtualLedGrid virtualGrid, CancellationToken cancellationToken = default)
         {
             if (!this.Initialized)
-                return;
+            {
+                return Task.CompletedTask;
+            }
 
             var chromaLinkGrid = CustomChromaLinkEffect.Create();
 
             var keyIdx = 0;
             foreach (var key in virtualGrid)
             {
-                chromaLinkGrid[keyIdx++] = ToColoreColor(key.Color.Value);
+                chromaLinkGrid[keyIdx++] = ToColoreColor(key.Color);
             }
 
-            await this.ChromaInterface.ChromaLink.SetCustomAsync(chromaLinkGrid);
+            return this.ChromaInterface!.ChromaLink.SetCustomAsync(chromaLinkGrid);
         }
     }
 }

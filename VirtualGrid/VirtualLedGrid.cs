@@ -64,20 +64,29 @@ namespace VirtualGrid
         public VirtualLedGrid(int column, int row)
         {
             if (column < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(column));
+            }
+
             if (row < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(row));
+            }
 
             var grid = new VirtualKey[row][];
+
             for (var rowCount = 0; rowCount < row; rowCount++)
             {
                 var rowArray = new VirtualKey[column];
+
                 for (var columnCount = 0; columnCount < column; columnCount++)
                 {
                     rowArray[columnCount] = new VirtualKey(columnCount, rowCount);
                 }
+
                 grid[rowCount] = rowArray;
             }
+
             this._grid = grid;
             this._totalColumnCount = column;
             this._totalRowCount = row;
@@ -97,8 +106,12 @@ namespace VirtualGrid
         public void Set(Color? color)
         {
             foreach (var row in this._grid)
+            {
                 foreach (var key in row)
+                {
                     key.Color = color;
+                }
+            }
         }
 
         /// <summary>
@@ -107,9 +120,6 @@ namespace VirtualGrid
         /// <param name="colors"></param>
         public void Set(Color?[][] colors)
         {
-            if (colors == null)
-                throw new ArgumentNullException(nameof(colors));
-
             for (var y = 0; y < colors.GetLength(0); y++)
             {
                 var row = colors[y];
@@ -134,20 +144,26 @@ namespace VirtualGrid
         {
             var grid = new IVirtualKey[rowCount][];
             var subRow = this._grid.Skip(row).Take(rowCount).ToArray();
+
             for (var rowIdx = 0; rowIdx < subRow.Length; rowIdx++)
             {
                 var currentRow = subRow[rowIdx].Skip(column).Take(columnCount).ToArray();
                 grid[rowIdx] = currentRow;
             }
-            return new VirtualLedGrid(grid, grid.First().Length, subRow.Length);
+
+            return new VirtualLedGrid(grid, columnCount, rowCount);
         }
 
         /// <inheritdoc/>
         public IEnumerator<IVirtualKey> GetEnumerator()
         {
             foreach (var row in this._grid)
+            {
                 foreach (var key in row)
+                {
                     yield return key;
+                }
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -156,11 +172,10 @@ namespace VirtualGrid
         }
 
         /// <inheritdoc/>
-        public static VirtualLedGrid operator +(VirtualLedGrid? grid, VirtualLedGrid? anotherGrid)
+        public static VirtualLedGrid operator +(VirtualLedGrid grid, VirtualLedGrid anotherGrid)
         {
-#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             var resultGrid = (IVirtualLedGrid)grid + (IVirtualLedGrid)anotherGrid;
-#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+
             return (VirtualLedGrid)resultGrid;
         }
     }
