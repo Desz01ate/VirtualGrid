@@ -57,6 +57,11 @@ namespace VirtualGrid.Interfaces
         /// <inheritdoc/>
         public static IVirtualLedGrid operator +(IVirtualLedGrid grid, IVirtualLedGrid anotherGrid)
         {
+            if (grid == null || anotherGrid == null)
+            {
+                throw new InvalidOperationException();
+            }
+
             var gridZip = grid.Zip(anotherGrid, (l, r) => (Layer1: l, Layer2: r));
 
             foreach (var (Layer1, Layer2) in gridZip)

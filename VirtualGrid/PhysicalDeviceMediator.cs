@@ -27,7 +27,8 @@ namespace VirtualGrid
         /// Constructor for physical device mediator with single virtual LED grid.
         /// </summary>
         /// <param name="grid"></param>
-        public PhysicalDeviceMediator(IVirtualLedGrid grid) : this(new[] { grid })
+        public PhysicalDeviceMediator(IVirtualLedGrid grid)
+            : this(grid == null ? throw new ArgumentNullException(nameof(grid)) : new[] { grid })
         {
         }
 

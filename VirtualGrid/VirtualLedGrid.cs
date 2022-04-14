@@ -145,13 +145,18 @@ namespace VirtualGrid
             var grid = new IVirtualKey[rowCount][];
             var subRow = this._grid.Skip(row).Take(rowCount).ToArray();
 
+            var colSize = int.MinValue;
+
             for (var rowIdx = 0; rowIdx < subRow.Length; rowIdx++)
             {
                 var currentRow = subRow[rowIdx].Skip(column).Take(columnCount).ToArray();
+
                 grid[rowIdx] = currentRow;
+
+                colSize = Math.Max(colSize, currentRow.Length);
             }
 
-            return new VirtualLedGrid(grid, columnCount, rowCount);
+            return new VirtualLedGrid(grid, colSize, subRow.Length);
         }
 
         /// <inheritdoc/>
