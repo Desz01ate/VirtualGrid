@@ -23,4 +23,8 @@ This version is not compatible backward with v.2.0 because virtual grid and virt
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <DocumentationFile>G:\Documents\GitHub\ListenerX\Submodules\VirtualGrid\VirtualGrid\VirtualGrid.xml</DocumentationFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Threading.Channels" Version="6.0.0" />
+  </ItemGroup>
 </Project>

@@ -63,10 +63,11 @@ namespace VirtualGrid.Interfaces
             }
 
             var gridZip = grid.Zip(anotherGrid, (l, r) => (Layer1: l, Layer2: r));
-            foreach (var pair in gridZip)
+
+            foreach (var (Layer1, Layer2) in gridZip)
             {
-                var top = pair.Layer2;
-                var bottom = pair.Layer1;
+                var top = Layer2;
+                var bottom = Layer1;
 
                 if (top?.Color != null)
                 {
