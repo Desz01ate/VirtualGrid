@@ -174,7 +174,7 @@ namespace VirtualGrid
         /// <inheritdoc/>
         public static VirtualLedGrid operator +(VirtualLedGrid grid, VirtualLedGrid anotherGrid)
         {
-            var resultGrid = (IVirtualLedGrid)grid + (IVirtualLedGrid)anotherGrid;
+            var resultGrid = (IVirtualLedGrid)grid + anotherGrid;
 
             return (VirtualLedGrid)resultGrid;
         }

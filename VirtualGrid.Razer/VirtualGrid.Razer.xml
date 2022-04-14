@@ -10,18 +10,6 @@
             An adapter to convert <see cref="T:VirtualGrid.Interfaces.IVirtualLedGrid"/> into Razer-compatible headset effects.
             </summary>
         </member>
-        <member name="P:VirtualGrid.Razer.RazerHeadsetAdapter.Name">
-            <inheritdoc/>
-        </member>
-        <member name="P:VirtualGrid.Razer.RazerHeadsetAdapter.RowCount">
-            <inheritdoc/>
-        </member>
-        <member name="P:VirtualGrid.Razer.RazerHeadsetAdapter.ColumnCount">
-            <inheritdoc/>
-        </member>
-        <member name="M:VirtualGrid.Razer.RazerHeadsetAdapter.ApplyAsync(VirtualGrid.Interfaces.IVirtualLedGrid,System.Threading.CancellationToken)">
-            <inheritdoc/>
-        </member>
         <member name="T:VirtualGrid.Razer.RazerKeyboardAdapter">
             <summary>
             An adapter to convert <see cref="T:VirtualGrid.Interfaces.IVirtualLedGrid"/> into Razer-compatible keyboard effects.
@@ -66,7 +54,7 @@
         <member name="M:VirtualGrid.Razer.RazerPeripheralBaseAdapter.Dispose">
             <inheritdoc/>
         </member>
-        <member name="M:VirtualGrid.Razer.RazerPeripheralBaseAdapter.ToColoreColor(VirtualGrid.Color)">
+        <member name="M:VirtualGrid.Razer.RazerPeripheralBaseAdapter.ToColoreColor(System.Nullable{VirtualGrid.Color})">
             <summary>
             Convert <see cref="T:VirtualGrid.Color"/> to <see cref="T:Colore.Data.Color"/> which is supported by Razer SDK.
             </summary>

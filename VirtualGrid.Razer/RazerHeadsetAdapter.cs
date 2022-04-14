@@ -25,6 +25,7 @@ namespace VirtualGrid.Razer
 
             var headset = CustomHeadsetEffect.Create();
 
+            var actualIdx = 0;
             var keyIdx = 0;
 
             foreach (var cell in virtualGrid)
@@ -32,7 +33,7 @@ namespace VirtualGrid.Razer
                 if (keyIdx++ % 2 != 0)
                     continue;
 
-                headset[keyIdx++] = ToColoreColor(cell.Color);
+                headset[actualIdx++] = ToColoreColor(cell.Color);
             }
 
             return this.ChromaInterface!.Headset.SetCustomAsync(headset);
