@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Channels;
 using System.Threading.Tasks;
 using VirtualGrid.Interfaces;
 
@@ -15,7 +14,6 @@ namespace VirtualGrid
     {
         private readonly IDictionary<IPhysicalDeviceAdapter, (int X, int Y)> _adapters;
         private readonly ICollection<IVirtualLedGrid> _grids;
-        private readonly Channel<(IVirtualLedGrid Grid, IPhysicalDeviceAdapter Adapter)> _channel;
 
         private bool _disposed;
 
@@ -51,9 +49,6 @@ namespace VirtualGrid
 
             this._grids = grids;
             this._adapters = new Dictionary<IPhysicalDeviceAdapter, (int X, int Y)>();
-            this._channel = Channel.CreateBounded<(IVirtualLedGrid Grid, IPhysicalDeviceAdapter Adapter)>(100);
-
-            Task.Run(() => this.ConsumeAsync());
         }
 
         /// <inheritdoc/>
@@ -127,14 +122,16 @@ namespace VirtualGrid
         }
 
         /// <inheritdoc/>
-        public async Task ApplyAsync(CancellationToken cancellationToken = default)
+        public Task ApplyAsync(CancellationToken cancellationToken = default)
         {
             var grid = this._grids.Aggregate((x, y) => x + y);
 
             if (!grid.Any())
             {
-                return;
+                return Task.CompletedTask;
             }
+
+            var tasks = new Task[_adapters.Count];
 
             for (var idx = 0; idx < _adapters.Count; idx++)
             {
@@ -148,8 +145,12 @@ namespace VirtualGrid
                     continue;
                 }
 
-                await this._channel.Writer.WriteAsync((slicedGrid, adapter), cancellationToken);
+                var task = adapter.ApplyAsync(slicedGrid, cancellationToken);
+
+                tasks[idx] = task;
             }
+
+            return Task.WhenAll(tasks);
         }
 
         private void Dispose(bool disposing)
@@ -175,22 +176,6 @@ namespace VirtualGrid
         {
             this.Dispose(true);
             GC.SuppressFinalize(this);
-        }
-
-        private async Task ConsumeAsync()
-        {
-            var reader = this._channel.Reader;
-
-            while (await reader.WaitToReadAsync())
-            {
-                if (reader.TryRead(out var message))
-                {
-                    var grid = message.Grid;
-                    var adapter = message.Adapter;
-
-                    await adapter.ApplyAsync(grid);
-                }
-            }
         }
     }
 }
