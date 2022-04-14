@@ -185,7 +185,7 @@
         </member>
         <member name="P:VirtualGrid.Interfaces.IPhysicalDeviceAdapter.Initialized">
             <summary>
-            Determine whether the adapter is initialize successfully. 
+            Determine whether the adapter is initialized successfully. 
             </summary>
         </member>
         <member name="P:VirtualGrid.Interfaces.IPhysicalDeviceAdapter.RowCount">

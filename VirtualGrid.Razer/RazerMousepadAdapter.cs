@@ -12,27 +12,29 @@ namespace VirtualGrid.Razer
     /// </summary>
     public class RazerMousepadAdapter : RazerPeripheralBaseAdapter
     {
-        //<inheritdoc/>
         public override string Name => "RΛZΞR Mousepad";
 
         public override int RowCount => 1;
 
         public override int ColumnCount => 15;
 
-        public override async Task ApplyAsync(IVirtualLedGrid virtualGrid, CancellationToken cancellationToken = default)
+        public override Task ApplyAsync(IVirtualLedGrid virtualGrid, CancellationToken cancellationToken = default)
         {
             if (!this.Initialized)
-                return;
+            {
+                return Task.CompletedTask;
+            }
 
             var mousepadGrid = CustomMousepadEffect.Create();
 
             var keyIdx = 0;
+
             foreach (var key in virtualGrid.Reverse())
             {
-                mousepadGrid[keyIdx++] = ToColoreColor(key.Color.Value);
+                mousepadGrid[keyIdx++] = ToColoreColor(key.Color);
             }
 
-            await this.ChromaInterface.Mousepad.SetCustomAsync(mousepadGrid);
+            return this.ChromaInterface!.Mousepad.SetCustomAsync(mousepadGrid);
         }
     }
 }

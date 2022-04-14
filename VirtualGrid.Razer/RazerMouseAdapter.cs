@@ -16,10 +16,12 @@ namespace VirtualGrid.Razer
 
         public override int ColumnCount => 7;
 
-        public override async Task ApplyAsync(IVirtualLedGrid virtualGrid, CancellationToken cancellationToken = default)
+        public override Task ApplyAsync(IVirtualLedGrid virtualGrid, CancellationToken cancellationToken = default)
         {
             if (!this.Initialized)
-                return;
+            {
+                return Task.CompletedTask;
+            }
 
             var mouseGrid = CustomMouseEffect.Create();
 
@@ -27,11 +29,11 @@ namespace VirtualGrid.Razer
             {
                 for (var col = 0; col < virtualGrid.ColumnCount; col++)
                 {
-                    mouseGrid[row, col] = ToColoreColor(virtualGrid[col, row].Value);
+                    mouseGrid[row, col] = ToColoreColor(virtualGrid[col, row]);
                 }
             }
 
-            await this.ChromaInterface.Mouse.SetGridAsync(mouseGrid);
+            return this.ChromaInterface!.Mouse.SetGridAsync(mouseGrid);
         }
     }
 }

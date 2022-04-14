@@ -10,17 +10,18 @@ namespace VirtualGrid.Razer
     /// </summary>
     public class RazerKeyboardAdapter : RazerPeripheralBaseAdapter
     {
-        //<inheritdoc/>
         public override string Name => "RΛZΞR Keyboard";
 
         public override int RowCount => 6;
 
         public override int ColumnCount => 22;
 
-        public override async Task ApplyAsync(IVirtualLedGrid virtualGrid, CancellationToken cancellationToken = default)
+        public override Task ApplyAsync(IVirtualLedGrid virtualGrid, CancellationToken cancellationToken = default)
         {
             if (!this.Initialized)
-                return;
+            {
+                return Task.CompletedTask;
+            }
 
             var keyboardGrid = CustomKeyboardEffect.Create();
 
@@ -28,11 +29,11 @@ namespace VirtualGrid.Razer
             {
                 for (var col = 0; col < virtualGrid.ColumnCount; col++)
                 {
-                    keyboardGrid[row, col] = ToColoreColor(virtualGrid[col, row].Value);
+                    keyboardGrid[row, col] = ToColoreColor(virtualGrid[col, row]);
                 }
             }
 
-            await this.ChromaInterface.Keyboard.SetCustomAsync(keyboardGrid);
+            return this.ChromaInterface!.Keyboard.SetCustomAsync(keyboardGrid);
         }
     }
 }

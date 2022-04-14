@@ -29,10 +29,16 @@ namespace SystemMonitor
             var totalMemoryMBytes = GC.GetGCMemoryInfo().TotalAvailableMemoryBytes / 1024 / 1024;
             var gpu = PhysicalGPU.GetPhysicalGPUs().FirstOrDefault();
 
+            var backgroundGrid = new VirtualLedGrid(30, 9);
+
+            backgroundGrid.Set(new Color(0, 16, 0));
 
             var grid = new VirtualLedGrid(30, 9);
-            grid.Set(new Color(6, 6, 6));
-            using var mediator = new PhysicalDeviceMediator(grid);
+
+            // Order of grid matters, predecessor grids will get override by successor grids.
+            // in this example the green background will get override by custom system color in some area.
+            using var mediator = new PhysicalDeviceMediator(backgroundGrid, grid);
+
             mediator.Attach<RazerKeyboardAdapter>(0, 1);
             mediator.Attach<RazerMousepadAdapter>(0, 0);
             mediator.Attach<RazerMouseAdapter>(23, 0);
@@ -43,7 +49,6 @@ namespace SystemMonitor
             var memoryGrid = grid.Slice(2, 3, 12, 1);
             var diskGrid = grid.Slice(2, 4, 11, 1);
             var gpuGrid = grid.Slice(2, 5, 11, 1);
-
 
             var cpuColor = new Color(17, 125, 187);
             var memoryColor = new Color(139, 18, 174);
@@ -87,6 +92,7 @@ namespace SystemMonitor
                 {
                     diskGrid[diskCol, 0] = diskColor;
                 }
+
                 for (var gpuCol = 0; gpuCol < gpuGridLegth; gpuCol++)
                 {
                     gpuGrid[gpuCol, 0] = cpuColor;

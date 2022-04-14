@@ -56,9 +56,14 @@ namespace VirtualGrid.Razer
         /// </summary>
         /// <param name="color"></param>
         /// <returns></returns>
-        protected static Colore.Data.Color ToColoreColor(Color color)
+        protected static Colore.Data.Color ToColoreColor(Color? color)
         {
-            return new Colore.Data.Color(color.Value);
+            if (color == null)
+            {
+                return Colore.Data.Color.Black;
+            }
+
+            return new Colore.Data.Color(color.Value.Value);
         }
     }
 }
