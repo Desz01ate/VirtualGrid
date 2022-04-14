@@ -4,10 +4,10 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
-    <Version>2.1</Version>
+    <Version>2.1.1</Version>
     <PackageReleaseNotes>** You need to manually copy Interop.AuraServiceLib.dll in package directory to output directory to make this library works. **
 
-This release contains code update to support VirtualGrid v.2.1.</PackageReleaseNotes>
+Performance improvement for speed and memory usage.</PackageReleaseNotes>
     <Copyright>Copyright © Chanvut Booneid 2021</Copyright>
     <PackageProjectUrl>https://github.com/Desz01ate/VirtualGrid</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Desz01ate/VirtualGrid</RepositoryUrl>

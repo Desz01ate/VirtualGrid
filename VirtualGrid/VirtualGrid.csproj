@@ -4,13 +4,12 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
-    <Version>2.1</Version>
+    <Version>2.1.1</Version>
     <Description>A library to simplify RGB tasks when working with multiple devices and vendors by create single lightweight abstract LED array and convert into device or vendor specific implementation via adapter at later state.</Description>
     <Copyright>Copyright © Chanvut Booneid 2021</Copyright>
     <PackageProjectUrl>https://github.com/Desz01ate/VirtualGrid</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Desz01ate/VirtualGrid</RepositoryUrl>
-    <PackageReleaseNotes>This release contains code update to support multiple layers on mediator.
-This version is not compatible backward with v.2.0 because virtual grid and virtual key now treat their color as nullable and will require you to update code a little bit if you upgrade from v.2.0.</PackageReleaseNotes>
+    <PackageReleaseNotes>Bugs fixes and performance improvement.</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
