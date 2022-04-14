@@ -21,7 +21,7 @@ This release contains code update to support VirtualGrid v.2.1.</PackageReleaseN
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>G:\Documents\GitHub\ListenerX\Submodules\VirtualGrid\VirtualGrid.Asus\VirtualGrid.Asus.xml</DocumentationFile>
+    <DocumentationFile>VirtualGrid.Asus.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

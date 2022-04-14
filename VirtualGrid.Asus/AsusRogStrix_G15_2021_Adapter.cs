@@ -39,9 +39,9 @@ namespace VirtualGrid.Asus
             }
         }
 
-        private readonly IAuraSdk2? _sdk;
-        private readonly IAuraSyncDevice? _notebookKeyboard;
-        private readonly Representator? _representor;
+        private readonly IAuraSdk2 _sdk;
+        private readonly IAuraSyncDevice _notebookKeyboard;
+        private readonly Representator _representor;
 
         /// <inheritdoc/>
         public string Name => "Asus Rog Strix Laptop";
@@ -66,7 +66,7 @@ namespace VirtualGrid.Asus
                 sdk.SwitchMode();
                 var devices = sdk.Enumerate(528384);
                 this._sdk = sdk;
-                this._notebookKeyboard = devices.Count > 0 ? devices[0] : null;
+                this._notebookKeyboard = devices.Count > 0 ? devices[0] : throw new Exception("No Asus device attached.");
                 this._representor = new Representator();
                 this.Initialized = true;
             }
@@ -79,31 +79,38 @@ namespace VirtualGrid.Asus
         /// <inheritdoc/>
         public Task ApplyAsync(IVirtualLedGrid virtualGrid, CancellationToken cancellationToken = default)
         {
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
             if (!this.Initialized)
+            {
                 return Task.CompletedTask;
+            }
 
             for (var row = 0; row < virtualGrid.RowCount; row++)
             {
                 for (var col = 0; col < virtualGrid.ColumnCount; col++)
                 {
-                    var asusKey = _representor[col, row];
-                    var asusKeyName = asusKey.ToString();
-                    if (asusKeyName.Contains("Invalid") || asusKey == RogStrixKeyboardKey.GhostKey)
+                    var cellColor = virtualGrid[col, row];
+
+                    if (cellColor == null)
                     {
                         continue;
                     }
-                    var cellColor = virtualGrid[col, row];
-                    if (cellColor == null)
+
+                    var asusKey = _representor[col, row];
+
+                    if (IsInvalidKey(asusKey))
+                    {
                         continue;
+                    }
 
                     var color = ToUint(cellColor.Value);
+
                     _notebookKeyboard.Lights[(int)asusKey].Color = color;
                 }
             }
+
             _notebookKeyboard.Apply();
+
             return Task.CompletedTask;
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
         }
 
         /// <inheritdoc/>
@@ -116,6 +123,88 @@ namespace VirtualGrid.Asus
         {
             var value = (color.B << 16) | (color.G << 8) | (color.R);
             return (uint)value;
+        }
+
+        private static bool IsInvalidKey(RogStrixKeyboardKey key)
+        {
+            switch (key)
+            {
+                case RogStrixKeyboardKey.GhostKey:
+                case RogStrixKeyboardKey.Invalid0_1:
+                case RogStrixKeyboardKey.Invalid0_2:
+                case RogStrixKeyboardKey.Invalid0_3:
+                case RogStrixKeyboardKey.Invalid0_4:
+                case RogStrixKeyboardKey.Invalid0_5:
+                case RogStrixKeyboardKey.Invalid0_6:
+                case RogStrixKeyboardKey.Invalid0_7:
+                case RogStrixKeyboardKey.Invalid0_8:
+                case RogStrixKeyboardKey.Invalid0_9:
+                case RogStrixKeyboardKey.Invalid0_10:
+                case RogStrixKeyboardKey.Invalid0_11:
+                case RogStrixKeyboardKey.Invalid0_12:
+                case RogStrixKeyboardKey.Invalid0_13:
+                case RogStrixKeyboardKey.Invalid0_14:
+                case RogStrixKeyboardKey.Invalid0_15:
+                case RogStrixKeyboardKey.Invalid0_16:
+                case RogStrixKeyboardKey.Invalid1_1:
+                case RogStrixKeyboardKey.Invalid1_2:
+                case RogStrixKeyboardKey.Invalid1_3:
+                case RogStrixKeyboardKey.Invalid1_4:
+                case RogStrixKeyboardKey.Invalid1_5:
+                case RogStrixKeyboardKey.Invalid1_6:
+                case RogStrixKeyboardKey.Invalid1_7:
+                case RogStrixKeyboardKey.Invalid2_1:
+                case RogStrixKeyboardKey.Invalid2_2:
+                case RogStrixKeyboardKey.Invalid2_3:
+                case RogStrixKeyboardKey.Invalid2_4:
+                case RogStrixKeyboardKey.Invalid3_1:
+                case RogStrixKeyboardKey.Invalid3_2:
+                case RogStrixKeyboardKey.Invalid3_3:
+                case RogStrixKeyboardKey.Invalid3_4:
+                case RogStrixKeyboardKey.Invalid3_5:
+                case RogStrixKeyboardKey.Invalid3_6:
+                case RogStrixKeyboardKey.Invalid4_1:
+                case RogStrixKeyboardKey.Invalid4_2:
+                case RogStrixKeyboardKey.Invalid4_3:
+                case RogStrixKeyboardKey.Invalid4_4:
+                case RogStrixKeyboardKey.Invalid4_5:
+                case RogStrixKeyboardKey.Invalid5_1:
+                case RogStrixKeyboardKey.Invalid5_2:
+                case RogStrixKeyboardKey.Invalid5_3:
+                case RogStrixKeyboardKey.Invalid5_4:
+                case RogStrixKeyboardKey.Invalid5_5:
+                case RogStrixKeyboardKey.Invalid5_6:
+                case RogStrixKeyboardKey.Invalid6_1:
+                case RogStrixKeyboardKey.Invalid6_2:
+                case RogStrixKeyboardKey.Invalid6_3:
+                case RogStrixKeyboardKey.Invalid6_4:
+                case RogStrixKeyboardKey.Invalid6_5:
+                case RogStrixKeyboardKey.Invalid6_6:
+                case RogStrixKeyboardKey.Invalid6_7:
+                case RogStrixKeyboardKey.Invalid6_8:
+                case RogStrixKeyboardKey.Invalid6_9:
+                case RogStrixKeyboardKey.Invalid7_1:
+                case RogStrixKeyboardKey.Invalid7_2:
+                case RogStrixKeyboardKey.Invalid7_3:
+                case RogStrixKeyboardKey.Invalid7_4:
+                case RogStrixKeyboardKey.Invalid7_5:
+                case RogStrixKeyboardKey.Invalid7_6:
+                case RogStrixKeyboardKey.Invalid7_7:
+                case RogStrixKeyboardKey.Invalid7_8:
+                case RogStrixKeyboardKey.Invalid7_9:
+                case RogStrixKeyboardKey.Invalid7_10:
+                case RogStrixKeyboardKey.Invalid7_11:
+                case RogStrixKeyboardKey.Invalid7_12:
+                case RogStrixKeyboardKey.Invalid7_13:
+                case RogStrixKeyboardKey.Invalid7_14:
+                case RogStrixKeyboardKey.Invalid7_15:
+                case RogStrixKeyboardKey.Invalid7_16:
+                case RogStrixKeyboardKey.Invalid7_17:
+                case RogStrixKeyboardKey.Invalid7_18:
+                    return true;
+                default:
+                    return false;
+            }
         }
     }
 }

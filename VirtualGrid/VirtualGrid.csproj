@@ -21,6 +21,6 @@ This version is not compatible backward with v.2.0 because virtual grid and virt
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <DocumentationFile>G:\Documents\GitHub\ListenerX\Submodules\VirtualGrid\VirtualGrid\VirtualGrid.xml</DocumentationFile>
+    <DocumentationFile>VirtualGrid.xml</DocumentationFile>
   </PropertyGroup>
 </Project>

@@ -27,13 +27,8 @@ namespace VirtualGrid
         /// Constructor for physical device mediator with single virtual LED grid.
         /// </summary>
         /// <param name="grid"></param>
-        public PhysicalDeviceMediator(IVirtualLedGrid grid)
+        public PhysicalDeviceMediator(IVirtualLedGrid grid) : this(new[] { grid })
         {
-            if (grid == null)
-                throw new ArgumentNullException(nameof(grid));
-
-            this._grids = new IVirtualLedGrid[1] { grid };
-            this._adapters = new Dictionary<IPhysicalDeviceAdapter, (int X, int Y)>();
         }
 
         /// <summary>
@@ -43,10 +38,14 @@ namespace VirtualGrid
         public PhysicalDeviceMediator(params IVirtualLedGrid[] grids)
         {
             if (grids == null || !grids.Any())
+            {
                 throw new ArgumentNullException(nameof(grids));
+            }
 
             if (grids.Any(x => x == null))
+            {
                 throw new ArgumentException(nameof(grids));
+            }
 
             this._grids = grids;
             this._adapters = new Dictionary<IPhysicalDeviceAdapter, (int X, int Y)>();
@@ -63,14 +62,26 @@ namespace VirtualGrid
         public void Attach(int x, int y, IPhysicalDeviceAdapter adapter)
         {
             if (x < 0 || y < 0)
+            {
                 throw new ArgumentOutOfRangeException($"Attach range must be at positive index.");
+            }
+
             if (adapter == null)
+            {
                 throw new ArgumentNullException(nameof(_adapters));
+            }
+
             if (!adapter.Initialized)
+            {
                 return;
+            }
+
             var adapterType = adapter.GetType();
+
             if (this._adapters.Any(x => x.Key.GetType() == adapterType))
+            {
                 throw new InvalidOperationException("Unable to attach the same adapter type to the mediator.");
+            }
 
             this._adapters.Add(adapter, (x, y));
         }
@@ -79,15 +90,19 @@ namespace VirtualGrid
         public bool UpdateAdapterPosition<T>(int x, int y) where T : IPhysicalDeviceAdapter
         {
             if (x < 0 || y < 0)
+            {
                 throw new ArgumentOutOfRangeException($"Attach range must be at positive index.");
+            }
 
             var adapter = this._adapters.SingleOrDefault(x => x.Key.GetType() == typeof(T));
+
             if (adapter.Key == null)
             {
                 return false;
             }
 
             this._adapters[adapter.Key] = (x, y);
+
             return true;
         }
 
@@ -95,12 +110,14 @@ namespace VirtualGrid
         public IPhysicalDeviceAdapter? Detach<T>() where T : IPhysicalDeviceAdapter
         {
             var adapter = this._adapters.SingleOrDefault(x => x.Key.GetType() == typeof(T)).Key;
+
             if (adapter == null)
             {
                 return null;
             }
 
             this._adapters.Remove(adapter);
+
             return adapter;
         }
 
@@ -110,9 +127,12 @@ namespace VirtualGrid
             var grid = this._grids.Aggregate((x, y) => x + y);
 
             if (!grid.Any())
+            {
                 return Task.CompletedTask;
+            }
 
             var tasks = new Task[_adapters.Count];
+
             for (var idx = 0; idx < _adapters.Count; idx++)
             {
                 var adapterPair = _adapters.ElementAt(idx);
@@ -120,16 +140,25 @@ namespace VirtualGrid
                 var (X, Y) = adapterPair.Value;
                 var slicedGrid = grid.Slice(X, Y, adapter.ColumnCount, adapter.RowCount);
 
-                var task = slicedGrid == null ? Task.CompletedTask : adapter.ApplyAsync(slicedGrid, cancellationToken);
+                if (slicedGrid == null)
+                {
+                    continue;
+                }
+
+                var task = adapter.ApplyAsync(slicedGrid, cancellationToken);
+
                 tasks[idx] = task;
             }
+
             return Task.WhenAll(tasks);
         }
 
         private void Dispose(bool disposing)
         {
             if (this._disposed)
+            {
                 return;
+            }
 
             if (disposing)
             {

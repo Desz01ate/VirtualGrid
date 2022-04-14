@@ -21,7 +21,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>G:\Documents\GitHub\ListenerX\Submodules\VirtualGrid\VirtualGrid.Razer\VirtualGrid.Razer.xml</DocumentationFile>
+    <DocumentationFile>VirtualGrid.Razer.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
